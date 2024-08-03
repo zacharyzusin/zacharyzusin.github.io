@@ -39,7 +39,6 @@ const About = () => {
   const frontEndSkills = [
     { iconClass: "devicon-html5-plain", name: "HTML" },
     { iconClass: "devicon-css3-plain", name: "CSS" },
-    { iconClass: "devicon-javascript-plain", name: "JavaScript" },
     { iconClass: "devicon-react-original", name: "React" },
     { iconClass: "devicon-nextjs-original-wordmark", name: "Next.js" },
   ];
