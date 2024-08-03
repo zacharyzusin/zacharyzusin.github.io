@@ -9,7 +9,7 @@ const ParticlesBackground = () => {
   }, []);
 
   const particlesLoaded = useCallback(async (container) => {
-    await console.log(container);
+    console.log(container);
   }, []);
 
   return (
