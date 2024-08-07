@@ -13,6 +13,13 @@ const projectsData = [
     technologies: ["R", "Linear Regression Models"],
   },
   {
+    title: "Wikipedia Article Clustering",
+    description: "This project fetches and preprocesses Wikipedia articles, converts the text into semantic embeddings using Sentence-BERT, and then applies UMAP for dimensionality reduction and K-Means clustering. It then creates an interactive scatter plot that visualizes the clustered articles, allowing users to explore their relationships based on semantic similarity.",
+    image: "/assets/newplot.png",
+    githubLink: "https://github.com/zacharyzusin/Wikipedia-Article-Clustering",
+    technologies: ["Python", "Natural Language Processing", "Scikit-Learn"],
+  },
+  {
     title: "Home Cooking Helper",
     description: "This web application serves as a comprehensive platform for home cooking, where users can receive guidance on anything they would need to know to prepare food in the comfort of their own home.",
     image: "/assets/353242587-5287105b-1b64-4bfd-a44b-97717ae5a652.jpg",
