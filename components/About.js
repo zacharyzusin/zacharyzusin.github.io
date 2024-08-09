@@ -95,9 +95,6 @@ const About = () => {
           ))}
         </div>
       </div>
-      <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-        <ScrollDownArrow targetId="projects" />
-      </div>
     </motion.section>
   );
 };

@@ -74,7 +74,7 @@ const Projects = () => {
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 3 }}
     >
-      <h2 className="text-5xl font-bold text-center">Projects</h2>
+      <h2 className="text-5xl font-bold mt-16 text-center">Projects</h2>
       <div className="flex flex-wrap justify-center mt-8">
         {projectsData.map((project, index) => (
           <div

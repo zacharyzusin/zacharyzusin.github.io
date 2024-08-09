@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons"; 
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons"; 
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import ScrollDownArrow from "./ScrollDownArrow";
 import { motion } from "framer-motion";
 
@@ -39,10 +39,12 @@ const HeaderSection = () => {
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 3 }}
     >
-      <div className="flex w-full items-center justify-between h-full">
-        <div className="flex flex-col items-start w-1/2">
-          <h1 className="text-8xl font-bold">Zachary Zusin</h1>
-          <div className="mt-8 flex space-x-6 ">
+      <div className="flex flex-col md:flex-row w-full items-center justify-between h-full">
+        <div className="flex flex-col items-center md:items-start w-full md:w-1/2 mt-16 md:mt-0">
+          <h1 className="text-6xl md:text-8xl font-bold text-center md:text-left">
+            Zachary Zusin
+          </h1>
+          <div className="mt-8 flex space-x-6 justify-center md:justify-start">
             <a
               href="https://github.com/zacharyzusin"
               target="_blank"
@@ -67,7 +69,7 @@ const HeaderSection = () => {
             </a>
           </div>
         </div>
-        <div className="flex items-center justify-center w-1/2">
+        <div className="flex items-center justify-center w-full md:w-1/2 mt-8">
           <Image
             src="/assets/zacharyzusin.png"
             alt="Zachary Zusin"
@@ -77,9 +79,6 @@ const HeaderSection = () => {
             priority
           />
         </div>
-      </div>
-      <div className="flex justify-center mt-8 absolute bottom-20 w-full">
-        <ScrollDownArrow targetId="about"/>
       </div>
     </motion.div>
   );
