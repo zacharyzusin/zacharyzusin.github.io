@@ -71,7 +71,7 @@ const HeaderSection = () => {
         </div>
         <div className="flex items-center justify-center w-full md:w-1/2 mt-8">
           <Image
-            src="/assets/zacharyzusin.png"
+            src="/assets/zacharyzusin2.jpeg"
             alt="Zachary Zusin"
             className="rounded-full border-4 border-gray-600 shadow-glow"
             width={400}
