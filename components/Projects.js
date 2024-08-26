@@ -36,7 +36,7 @@ const projectsData = [
   {
     title: "Personal Portfolio",
     description: "This website! I designed and created this site from scratch using Next.js, Tailwind CSS, and Framer Motion.",
-    image: "/assets/354836925-06b4377d-3b8b-4660-8318-af50d3b6c535.png",
+    image: "/assets/website.jpeg",
     githubLink: "https://github.com/zacharyzusin/zacharyzusin.github.io",
     technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
