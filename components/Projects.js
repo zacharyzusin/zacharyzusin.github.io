@@ -6,6 +6,13 @@ import { motion } from "framer-motion";
 
 const projectsData = [
   {
+    title: "Action Segmentation and Behavioral Analysis in Mice",
+    description: "This is the code I wrote for my Computational Neuroscience Research internship in which I developed diagnostics to assess the efficacy of Temporal Convolutional Network (TCN) models in predicting behavioral states of mice.",
+    image: "/assets/Diagnostics.png",
+    githubLink: "https://github.com/zacharyzusin/Neuroscience-Research",
+    technologies: ["Python", "Machine Learning", "Data Visualization"],
+  },
+  {
     title: "Exploring the Determinants of Life Expectancy",
     description: "This project develops a statistical model to examine the relationship between life expectancy and various social, economic, political, and geographic variables.",
     image: "/assets/353232171-fbefc5a0-bb55-4855-b5f2-c885bcf78dcc.png",
