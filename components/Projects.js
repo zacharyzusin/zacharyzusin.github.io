@@ -14,15 +14,15 @@ const projectsData = [
   },
   {
     title: "TDNN-Conformer",
-    description: "This project proposes and implements a modification to the Conformer model for the task of automatic speech recognition.",
-    image: "/assets/Diagnostics.png",
+    description: "This research paper proposes and implements a modification to the Conformer model for the task of automatic speech recognition.",
+    image: "/assets/tdnn.jpg",
     githubLink: "https://github.com/zacharyzusin/TDNN-Conformer",
     technologies: ["Python", "Machine Learning", "Speech Recognition"],
   },
   {
     title: "State Space Model POS Tagger",
     description: "This project implements a state space model-based Part-of-Speech tagger using MATLAB.",
-    image: "/assets/Diagnostics.png",
+    image: "/assets/ssm.png",
     githubLink: "https://github.com/zacharyzusin/State-Space-Model-POS-Tagger",
     technologies: ["MATLAB", "NLP"],
   },
