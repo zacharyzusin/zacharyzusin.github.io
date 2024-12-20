@@ -13,6 +13,20 @@ const projectsData = [
     technologies: ["Python", "Machine Learning", "Data Visualization"],
   },
   {
+    title: "TDNN-Conformer",
+    description: "This project proposes and implements a modification to the Conformer model for the task of automatic speech recognition.",
+    image: "/assets/Diagnostics.png",
+    githubLink: "https://github.com/zacharyzusin/TDNN-Conformer",
+    technologies: ["Python", "Machine Learning", "Speech Recognition"],
+  },
+  {
+    title: "State Space Model POS Tagger",
+    description: "This project implements a state space model-based Part-of-Speech tagger using MATLAB.",
+    image: "/assets/Diagnostics.png",
+    githubLink: "https://github.com/zacharyzusin/State-Space-Model-POS-Tagger",
+    technologies: ["MATLAB", "NLP"],
+  },
+  {
     title: "Exploring the Determinants of Life Expectancy",
     description: "This project develops a statistical model to examine the relationship between life expectancy and various social, economic, political, and geographic variables.",
     image: "/assets/353232171-fbefc5a0-bb55-4855-b5f2-c885bcf78dcc.png",
