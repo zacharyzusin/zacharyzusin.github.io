@@ -8,7 +8,7 @@ const projectsData = [
   {
     title: "Bitcoin Price Tracker",
     description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
-    image: "/assets/Diagnostics.png",
+    image: "/assets/bitcoin.png",
     githubLink: "https://github.com/zacharyzusin/BitcoinPriceTracker",
     technologies: ["Elixir", "Phoenix", "Phoenix Liveview"],
   },
