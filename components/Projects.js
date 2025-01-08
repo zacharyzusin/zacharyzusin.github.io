@@ -6,6 +6,13 @@ import { motion } from "framer-motion";
 
 const projectsData = [
   {
+    title: "Bitcoin Price Tracker",
+    description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
+    image: "/assets/Diagnostics.png",
+    githubLink: "https://github.com/zacharyzusin/BitcoinPriceTracker",
+    technologies: ["Elixir", "Phoenix", "Phoenix Liveview"],
+  },
+  {
     title: "Action Segmentation and Behavioral Analysis in Mice",
     description: "This is the code I wrote for my Computational Neuroscience Research internship in which I developed diagnostics to assess the efficacy of Temporal Convolutional Network (TCN) models in predicting behavioral states of mice.",
     image: "/assets/Diagnostics.png",
