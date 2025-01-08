@@ -10,7 +10,7 @@ const projectsData = [
     description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
     image: "/assets/bitcoin.png",
     githubLink: "https://github.com/zacharyzusin/BitcoinPriceTracker",
-    technologies: ["Elixir", "Phoenix", "Phoenix Liveview"],
+    technologies: ["Elixir", "Phoenix", "Phoenix Liveview", "PostgreSQL"],
   },
   {
     title: "Action Segmentation and Behavioral Analysis in Mice",
