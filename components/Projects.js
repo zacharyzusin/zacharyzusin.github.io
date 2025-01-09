@@ -62,13 +62,6 @@ const projectsData = [
     technologies: ["HTML", "CSS", "JavaScript"],
   },
   {
-    title: "Personal Portfolio",
-    description: "This website! I designed and created this site from scratch using Next.js, Tailwind CSS, and Framer Motion.",
-    image: "/assets/website.jpeg",
-    githubLink: "https://github.com/zacharyzusin/zacharyzusin.github.io",
-    technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
-  },
-  {
     title: "Neural Network Dependency Parser",
     description: "This code implements a neural network-based dependency parser implemented in PyTorch that predicts transitions for an arc-standard dependency parser.",
     image: "/assets/neuraldependency.png",
@@ -88,6 +81,13 @@ const projectsData = [
     image: "/assets/trigram.png",
     githubLink: "https://github.com/zacharyzusin/Trigram-Language-Model",
     technologies: ["Python", "Natural Language Processing"],
+  },
+  {
+    title: "Personal Portfolio",
+    description: "This website! I designed and created this site from scratch using Next.js, Tailwind CSS, and Framer Motion.",
+    image: "/assets/website.jpeg",
+    githubLink: "https://github.com/zacharyzusin/zacharyzusin.github.io",
+    technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
 ];
 
