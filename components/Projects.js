@@ -68,6 +68,27 @@ const projectsData = [
     githubLink: "https://github.com/zacharyzusin/zacharyzusin.github.io",
     technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
+  {
+    title: "Neural Network Dependency Parser",
+    description: "This code implements a neural network-based dependency parser implemented in PyTorch that predicts transitions for an arc-standard dependency parser.",
+    image: "/assets/bitcoin.png",
+    githubLink: "https://github.com/zacharyzusin/Neural-Network-Dependency-Parser",
+    technologies: ["Python", "PyTorch", "Natural Language Processing"],
+  },
+  {
+    title: "CKY Parser",
+    description: "This project implements the Cocke-Kasami-Younger (CKY) algorithm for parsing Context-Free Grammars (CFG) and Probabilistic Context-Free Grammars (PCFG). ",
+    image: "/assets/bitcoin.png",
+    githubLink: "https://github.com/zacharyzusin/CKY-Parser",
+    technologies: ["Python", "Natural Language Processing"],
+  },
+  {
+    title: "Trigram Language Model ",
+    description: "This project implements a trigram language model in Python for text analysis and essay classification.",
+    image: "/assets/bitcoin.png",
+    githubLink: "https://github.com/zacharyzusin/Trigram-Language-Model",
+    technologies: ["Python", "Natural Language Processing"],
+  },
 ];
 
 const Projects = () => {
