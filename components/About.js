@@ -36,14 +36,11 @@ const About = () => {
     { iconClass: "devicon-c-plain", name: "C" },
   ];
   
-  const frontEndSkills = [
+  const frontAndBackEndSkills = [
     { iconClass: "devicon-html5-plain", name: "HTML" },
     { iconClass: "devicon-css3-plain", name: "CSS" },
     { iconClass: "devicon-react-original", name: "React" },
     { iconClass: "devicon-nextjs-original-wordmark", name: "Next.js" },
-  ];
-
-  const backEndSkills = [
     { iconClass: "devicon-postgresql-plain", name: "PostgreSQL" },
   ];
 
@@ -74,16 +71,9 @@ const About = () => {
             <SkillIcon key={index} iconClass={skill.iconClass} name={skill.name} />
           ))}
 
-        </div><h3 className="text-3xl font-bold text-center mb-4">Front End</h3>
+        </div><h3 className="text-3xl font-bold text-center mb-4">Front and Back End</h3>
         <div className="flex flex-wrap justify-center mb-8">
-          {frontEndSkills.map((skill, index) => (
-            <SkillIcon key={index} iconClass={skill.iconClass} name={skill.name} />
-          ))}
-        </div>
-
-        <h3 className="text-3xl font-bold text-center mb-4">Back End</h3>
-        <div className="flex flex-wrap justify-center mb-8">
-          {backEndSkills.map((skill, index) => (
+          {frontAndBackEndSkills.map((skill, index) => (
             <SkillIcon key={index} iconClass={skill.iconClass} name={skill.name} />
           ))}
         </div>
