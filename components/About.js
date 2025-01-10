@@ -44,11 +44,11 @@ const About = () => {
     { iconClass: "devicon-postgresql-plain", name: "PostgreSQL" },
   ];
 
-  const machineLearningSkills = [
+  const dataSkills = [
     { iconClass: "devicon-pytorch-original", name: "PyTorch" },
+    { iconClass: "devicon-scikitlearn-plain", name: "Scikit-Learn" },
     { iconClass: "devicon-pandas-plain", name: "Pandas" },
     { iconClass: "devicon-numpy-plain", name: "NumPy" },
-    { iconClass: "devicon-scikitlearn-plain", name: "Scikit-Learn" },
   ];
 
   return (
@@ -78,9 +78,9 @@ const About = () => {
           ))}
         </div>
 
-        <h3 className="text-3xl font-bold text-center mb-4">Machine Learning</h3>
+        <h3 className="text-3xl font-bold text-center mb-4">Data Analysis and Machine Learning</h3>
         <div className="flex flex-wrap justify-center">
-          {machineLearningSkills.map((skill, index) => (
+          {dataSkills.map((skill, index) => (
             <SkillIcon key={index} iconClass={skill.iconClass} name={skill.name} />
           ))}
         </div>
