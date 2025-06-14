@@ -6,6 +6,13 @@ import { motion } from "framer-motion";
 
 const projectsData = [
   {
+    title: "Bird, Dog, or Reptile?",
+    description: "This project implements a hierarchical image classification model using a two-headed ResNet-50 architecture to classify animal images into both coarse (e.g., bird, dog, reptile) and fine-grained (e.g., chihuahua, rooster) categories, while handling unseen sub-classes via threshold-based novelty detection.",
+    image: "/assets/bitcoin.png",
+    githubLink: "https://github.com/zacharyzusin/Bird-Cat-Or-Dog",
+    technologies: ["PyTorch", "Python", "Machine Learning", "Computer Vision"],
+  },
+  {
     title: "Bitcoin Price Tracker",
     description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
     image: "/assets/bitcoin.png",
