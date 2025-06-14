@@ -6,18 +6,18 @@ import { motion } from "framer-motion";
 
 const projectsData = [
   {
+    title: "Home Cooking Helper",
+    description: "This web application serves as a comprehensive platform for home cooking, where users can receive guidance on anything they would need to know to prepare food in the comfort of their own home.",
+    image: "/assets/353242587-5287105b-1b64-4bfd-a44b-97717ae5a652.jpg",
+    githubLink: "https://github.com/zacharyzusin/Home-Cooking-Helper",
+    technologies: ["Python", "PostgreSQL", "Flask", "HTML", "CSS", "JavaScript"],
+  },
+  {
     title: "Bird, Dog, or Reptile?",
-    description: "This research project proposes and implements a hierarchical image classification model using a two-headed ResNet-50 architecture to classify animal images into both coarse (e.g., bird, dog, reptile) and fine-grained (e.g., chihuahua, rooster) categories, while handling unseen sub-classes via threshold-based novelty detection.",
+    description: "This research project proposes and implements a hierarchical image classification model using a two-headed ResNet-50 architecture to classify animal images into both coarse (bird, dog, reptile) and fine-grained (chihuahua, rooster) categories, while handling unseen sub-classes via threshold-based novelty detection.",
     image: "/assets/birddogreptile.png",
     githubLink: "https://github.com/zacharyzusin/Bird-Cat-Or-Dog",
     technologies: ["PyTorch", "Python", "Machine Learning", "Computer Vision"],
-  },
-  {
-    title: "Bitcoin Price Tracker",
-    description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
-    image: "/assets/bitcoin.png",
-    githubLink: "https://github.com/zacharyzusin/BitcoinPriceTracker",
-    technologies: ["Elixir", "Phoenix", "Phoenix Liveview", "PostgreSQL"],
   },
   {
     title: "Action Segmentation and Behavioral Analysis in Mice",
@@ -34,11 +34,18 @@ const projectsData = [
     technologies: ["Python", "Machine Learning", "Speech Recognition"],
   },
   {
-    title: "State Space Model POS Tagger",
-    description: "This project implements a state space model-based Part-of-Speech tagger using MATLAB.",
-    image: "/assets/ssm.png",
-    githubLink: "https://github.com/zacharyzusin/State-Space-Model-POS-Tagger",
-    technologies: ["MATLAB", "NLP"],
+    title: "Wikipedia Article Clustering",
+    description: "This project fetches and preprocesses Wikipedia articles, converts the text into semantic embeddings using Sentence-BERT, and then applies UMAP for dimensionality reduction and K-Means clustering. It then creates an interactive scatter plot that visualizes the clustered articles, allowing users to explore their relationships based on semantic similarity.",
+    image: "/assets/newplot.png",
+    githubLink: "https://github.com/zacharyzusin/Wikipedia-Article-Clustering",
+    technologies: ["Python", "Natural Language Processing", "Scikit-Learn"],
+  },
+  {
+    title: "Bitcoin Price Tracker",
+    description: "This code implements a real-time Bitcoin price tracking application built with Elixir and Phoenix, featuring LiveView for real-time updates and PostgreSQL for price history storage.",
+    image: "/assets/bitcoin.png",
+    githubLink: "https://github.com/zacharyzusin/BitcoinPriceTracker",
+    technologies: ["Elixir", "Phoenix", "Phoenix Liveview", "PostgreSQL"],
   },
   {
     title: "Exploring the Determinants of Life Expectancy",
@@ -48,18 +55,11 @@ const projectsData = [
     technologies: ["R", "Linear Regression Models"],
   },
   {
-    title: "Wikipedia Article Clustering",
-    description: "This project fetches and preprocesses Wikipedia articles, converts the text into semantic embeddings using Sentence-BERT, and then applies UMAP for dimensionality reduction and K-Means clustering. It then creates an interactive scatter plot that visualizes the clustered articles, allowing users to explore their relationships based on semantic similarity.",
-    image: "/assets/newplot.png",
-    githubLink: "https://github.com/zacharyzusin/Wikipedia-Article-Clustering",
-    technologies: ["Python", "Natural Language Processing", "Scikit-Learn"],
-  },
-  {
-    title: "Home Cooking Helper",
-    description: "This web application serves as a comprehensive platform for home cooking, where users can receive guidance on anything they would need to know to prepare food in the comfort of their own home.",
-    image: "/assets/353242587-5287105b-1b64-4bfd-a44b-97717ae5a652.jpg",
-    githubLink: "https://github.com/zacharyzusin/Home-Cooking-Helper",
-    technologies: ["Python", "PostgreSQL", "Flask", "HTML", "CSS", "JavaScript"],
+    title: "State Space Model POS Tagger",
+    description: "This project implements a state space model-based Part-of-Speech tagger using MATLAB.",
+    image: "/assets/ssm.png",
+    githubLink: "https://github.com/zacharyzusin/State-Space-Model-POS-Tagger",
+    technologies: ["MATLAB", "NLP"],
   },
   {
     title: "Wonderful Workouts",
