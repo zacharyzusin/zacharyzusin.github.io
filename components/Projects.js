@@ -83,7 +83,7 @@ const projectsData = [
     technologies: ["Python", "Natural Language Processing"],
   },
   {
-    title: "Trigram Language Model ",
+    title: "Trigram Language Model",
     description: "This project implements a trigram language model in Python for text analysis and essay classification.",
     image: "/assets/trigram.png",
     githubLink: "https://github.com/zacharyzusin/Trigram-Language-Model",
