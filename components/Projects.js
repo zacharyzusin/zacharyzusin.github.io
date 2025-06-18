@@ -156,7 +156,7 @@ const Projects = () => {
                 href={project.githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                className="inline-block mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600"
               >
                 <FontAwesomeIcon icon={faGithub} className="mr-2" />
                 View on GitHub
