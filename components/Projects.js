@@ -13,6 +13,13 @@ const projectsData = [
     technologies: ["Python", "PostgreSQL", "Flask", "HTML", "CSS", "JavaScript"],
   },
   {
+    title: "Factory Workflow Tracker",
+    description: "A lightweight Manufacturing Execution System (MES)-inspired web app simulating job orchestration and monitoring in a factory environment.",
+    image: "/assets/factory.png",
+    githubLink: "https://github.com/zacharyzusin/mes-simulator",
+    technologies: ["React", "PostgreSQL", "FastAPI", "TypeScript", "Python"],
+  },
+  {
     title: "Bird, Dog, or Reptile?",
     description: "This research project proposes and implements a hierarchical image classification model using a two-headed ResNet-50 architecture to classify animal images into both coarse (bird, dog, reptile) and fine-grained (chihuahua, rooster) categories, while handling unseen sub-classes via threshold-based novelty detection.",
     image: "/assets/birddogreptile.png",
