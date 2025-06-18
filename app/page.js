@@ -20,10 +20,10 @@ export default function Home() {
       <div className="relative z-10">
         <Navbar />
         <HeaderSection />
-        <section className = "mt-10" id="about">
+        <section id="about">
           <About />
         </section>
-        <section className = "mt-10" id="projects">
+        <section id="projects">
           <Projects />
         </section>
         <Footer />
