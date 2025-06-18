@@ -23,7 +23,7 @@ export default function Home() {
         <section className = "mt-20" id="about">
           <About />
         </section>
-        <section className = "mt-80" id="projects">
+        <section className = "mt-20" id="projects">
           <Projects />
         </section>
         <Footer />
