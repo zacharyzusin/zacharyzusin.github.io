@@ -16,7 +16,7 @@ const projectsData = [
     title: "Factory Workflow Tracker",
     description: "A lightweight Manufacturing Execution System (MES)-inspired web app simulating job orchestration and monitoring in a factory environment.",
     image: "/assets/factory.png",
-    githubLink: "https://github.com/zacharyzusin/mes-simulator",
+    githubLink: "https://github.com/zacharyzusin/Factory-Workflow-Tracker",
     technologies: ["React", "PostgreSQL", "FastAPI", "TypeScript", "Python"],
   },
   {
