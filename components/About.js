@@ -62,7 +62,7 @@ const About = () => {
     >
       <h2 className="text-5xl font-bold text-center">About Me</h2>
       <p className="mt-20 text-center text-xl">
-        I am a recent Computer Science graduate from Columbia University with a strong foundation in full-stack development, data science, and machine learning. I’ve held several machine learning research and software engineering roles and have experience applying my knowledge in software and statistics to domains ranging from computational neuroscience to automatic speech recognition. Please feel free to reach out with any opportunities or simply to connect!
+        I am a Computer Science Master's student at Columbia University with a strong foundation in backend development, data science, and machine learning. I’ve held several machine learning research and software engineering roles and have experience applying my knowledge in software and statistics to domains ranging from computational neuroscience to automatic speech recognition. Please feel free to reach out!
       </p>
       <div className="mt-20">
       <h3 className="text-3xl font-bold text-center mb-4">Languages</h3>
