@@ -29,7 +29,7 @@ const projectsData = [
   {
     title: "Action Segmentation and Behavioral Analysis in Mice",
     description: "This is the code I wrote for my Computational Neuroscience Research internship in which I developed diagnostics to assess the efficacy of Temporal Convolutional Network (TCN) models in predicting behavioral states of mice.",
-    image: "/assets/Diagnostics.png",
+    image: "/assets/Mouse.png",
     githubLink: "https://github.com/zacharyzusin/Neuroscience-Research",
     technologies: ["Python", "Machine Learning", "Data Visualization"],
   },
