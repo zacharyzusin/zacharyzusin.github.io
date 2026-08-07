@@ -242,7 +242,7 @@ export default function EarthGlobe() {
         </div>
 
         <p className="text-sm text-[#94a3b8] mb-10 max-w-lg">
-          Each marker is a place someone has visited this site from.
+          Each marker on the globe is a place someone has visited this site from.
         </p>
 
         <motion.div
