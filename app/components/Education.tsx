@@ -44,7 +44,7 @@ const degrees = [
     period: "Sep 2021 – May 2025",
     gpa: "3.7",
     highlights: [
-      "Dean's List · 4.0 Club Inductee",
+      "Dean's List",
       "Relevant coursework: Databases, High-Performance Computing, Machine Learning, Computer Vision, Natural Language Processing, Robotics, Analysis of Algorithms, Systems Programming, Computer Systems, Probability, Statistics",
     ],
   },

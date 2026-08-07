@@ -66,11 +66,6 @@ const experiences = [
   },
 ];
 
-const typeStyles: Record<string, string> = {
-  industry: "bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20",
-  research: "bg-[#6366f1]/10 text-[#818cf8] border border-[#6366f1]/20",
-};
-
 function ColumbiaIcon() {
   return (
     <Image
@@ -143,11 +138,6 @@ export default function Experience() {
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-1.5 shrink-0">
-                        <span
-                          className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${typeStyles[exp.type]}`}
-                        >
-                          {exp.type === "industry" ? "Industry" : "Research"}
-                        </span>
                         <span className="text-xs text-[#475569]">
                           {exp.period}
                         </span>

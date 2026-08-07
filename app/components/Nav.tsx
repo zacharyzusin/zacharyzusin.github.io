@@ -79,12 +79,6 @@ export default function Nav() {
               </MagneticLink>
             );
           })}
-          <a
-            href="#"
-            className="text-sm px-4 py-1.5 border border-[#3b82f6] text-[#3b82f6] rounded hover:bg-[#3b82f6] hover:text-white transition-all duration-200"
-          >
-            Resume
-          </a>
         </nav>
 
         {/* Mobile hamburger */}
@@ -138,13 +132,6 @@ export default function Nav() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#"
-                onClick={() => setMenuOpen(false)}
-                className="text-sm w-fit px-4 py-1.5 border border-[#3b82f6] text-[#3b82f6] rounded hover:bg-[#3b82f6] hover:text-white transition-all"
-              >
-                Resume
-              </a>
             </nav>
           </motion.div>
         )}
