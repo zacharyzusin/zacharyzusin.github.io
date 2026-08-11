@@ -57,7 +57,7 @@ const experiences = [
     title: "Undergraduate Researcher",
     org: "Zuckerman Mind Brain and Behavior Institute, Columbia University",
     location: "New York, NY",
-    period: "Jun 2025 – Aug 2025",
+    period: "Jun 2024 – Aug 2024",
     type: "research",
     bullets: [
       "Implemented a diagnostic pipeline in Python to evaluate the efficacy of Temporal Convolutional Network models in classifying mouse behavior",

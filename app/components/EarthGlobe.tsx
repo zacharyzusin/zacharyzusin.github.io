@@ -4,13 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { motion, useInView } from "framer-motion";
-import {
-  Visit,
-  fetchVisits,
-  recordVisit,
-  isConfigured,
-  SEED_VISITS,
-} from "../lib/visitors";
+import { Visit, fetchVisits, isConfigured, SEED_VISITS } from "../lib/visitors";
 
 const R = 1; // earth radius
 
@@ -54,7 +48,6 @@ export default function EarthGlobe() {
     let cancelled = false;
     (async () => {
       if (isConfigured()) {
-        await recordVisit();
         const data = await fetchVisits();
         if (!cancelled) setVisits(data.length ? data : SEED_VISITS);
       } else {
@@ -205,7 +198,8 @@ export default function EarthGlobe() {
     // Clear existing
     while (group.children.length) group.remove(group.children[0]);
 
-    // Aggregate by coarse location
+    // Group exact coordinate matches (e.g. repeat visits from the same
+    // network) into one bigger marker instead of stacking duplicates.
     const counts = new Map<string, { lat: number; lng: number; n: number }>();
     for (const v of visits) {
       const key = `${v.lat},${v.lng}`;

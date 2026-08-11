@@ -4,6 +4,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ParticleBackground from "./components/ParticleBackground";
 import CursorSpotlight from "./components/CursorSpotlight";
+import Analytics from "./components/Analytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,6 +66,7 @@ export default function RootLayout({
           <ParticleBackground />
         </div>
         <CursorSpotlight />
+        <Analytics />
         <div className="relative z-10">{children}</div>
       </body>
     </html>
