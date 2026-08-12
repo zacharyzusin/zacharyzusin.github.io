@@ -159,6 +159,11 @@ export default function EarthGlobe() {
     controls.rotateSpeed = 0.4;
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
+    // Once the user takes control (drag-to-rotate or scroll-to-zoom), stop
+    // fighting them with the auto-spin.
+    controls.addEventListener("start", () => {
+      controls.autoRotate = false;
+    });
 
     let raf = 0;
     const animate = () => {
@@ -247,7 +252,7 @@ export default function EarthGlobe() {
         >
           <div
             ref={mountRef}
-            className="w-full max-w-[480px] aspect-square cursor-grab active:cursor-grabbing"
+            className="w-full max-w-[480px] aspect-square rounded-full overflow-hidden cursor-grab active:cursor-grabbing"
           />
         </motion.div>
       </div>
