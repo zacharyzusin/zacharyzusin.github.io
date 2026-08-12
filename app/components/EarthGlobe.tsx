@@ -147,8 +147,8 @@ export default function EarthGlobe() {
     // Controls — auto-spin + drag to rotate
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
-    controls.zoomSpeed = 0.6;
-    controls.minDistance = 3.5;
+    controls.zoomSpeed = 0.8;
+    controls.minDistance = 1.3;
     controls.maxDistance = 6;
     controls.enablePan = false;
     const reduceMotion = window.matchMedia(
