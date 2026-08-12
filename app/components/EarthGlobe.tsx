@@ -218,7 +218,7 @@ export default function EarthGlobe() {
           blending: THREE.AdditiveBlending,
         })
       );
-      const s = 0.09 + Math.min(0.12, c.n * 0.02);
+      const s = 0.035 + Math.min(0.05, c.n * 0.008);
       sprite.scale.set(s, s, s);
       sprite.position.copy(pos);
       group.add(sprite);

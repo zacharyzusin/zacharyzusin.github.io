@@ -14,7 +14,8 @@ export type VisualType =
   | "ingredients"
   | "regression"
   | "reps"
-  | "walker";
+  | "walker"
+  | "pipeline";
 
 const ACCENT = "#3b82f6";
 const ACCENT_LIGHT = "#93c5fd";
@@ -510,6 +511,74 @@ function walker(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) 
   ctx.fill();
 }
 
+function pipeline(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
+  // The actual data path ported into FMS: raw audio -> Conformer encoder ->
+  // Q-Former projector -> LLM decoder -> text. The frame around all four
+  // stages solidifying and glowing represents torch.compile tracing them
+  // into one fused graph instead of four separate eager calls.
+  const stages = ["Audio", "Encoder", "Projector", "LLM"];
+  const n = stages.length;
+  const gap = w * 0.04;
+  const bw = (w - gap * (n - 1)) / n;
+  const y = h * 0.36;
+  const bh = h * 0.22;
+  const xs = Array.from({ length: n }, (_, i) => i * (bw + gap));
+
+  const cycle = (t * 0.5) % 1;
+  const activeIdx = Math.min(n - 1, Math.floor(cycle * n));
+  const compiled = Math.sin(t * 1.1) > 0;
+
+  const pad = 7;
+  ctx.strokeStyle = compiled ? ACCENT_LIGHT : MUTED;
+  ctx.lineWidth = compiled ? 1.6 : 1;
+  ctx.globalAlpha = compiled ? 0.85 : 0.45;
+  if (!compiled) ctx.setLineDash([3, 3]);
+  ctx.strokeRect(-pad, y - pad, w + pad * 2, bh + pad * 2);
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
+
+  ctx.textAlign = "center";
+  for (let i = 0; i < n; i++) {
+    const x = xs[i];
+    const isActive = i === activeIdx;
+
+    ctx.fillStyle = ACCENT;
+    ctx.globalAlpha = isActive ? 0.85 : 0.32;
+    ctx.fillRect(x, y, bw, bh);
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = "#f1f5f9";
+    ctx.font = isActive ? "700 8px monospace" : "600 8px monospace";
+    ctx.fillText(stages[i], x + bw / 2, y + bh / 2 + 3);
+
+    if (i < n - 1) {
+      ctx.strokeStyle = MUTED;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x + bw + 2, y + bh / 2);
+      ctx.lineTo(xs[i + 1] - 2, y + bh / 2);
+      ctx.stroke();
+    }
+  }
+  ctx.textAlign = "left";
+
+  // small waveform under the "Audio" stage so the input is legible at a glance
+  const wx = xs[0];
+  const wy = y + bh + 16;
+  ctx.strokeStyle = ACCENT_LIGHT;
+  ctx.lineWidth = 1.2;
+  ctx.globalAlpha = 0.7;
+  ctx.beginPath();
+  for (let i = 0; i <= bw; i += 3) {
+    const amp = Math.sin(i * 0.6 + t * 6) * 0.5 + 0.5;
+    const yy = wy + Math.sin(i * 0.4) * amp * 6;
+    if (i === 0) ctx.moveTo(wx + i, yy);
+    else ctx.lineTo(wx + i, yy);
+  }
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
 const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => void> = {
   waveform,
   hierarchy,
@@ -523,6 +592,7 @@ const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h
   regression,
   reps,
   walker,
+  pipeline,
 };
 
 export default function ProjectVisual({ type }: { type: VisualType }) {
