@@ -148,7 +148,20 @@ export default function EarthGlobe() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
     controls.zoomSpeed = 0.8;
-    controls.minDistance = 1.3;
+    // Closest zoom is capped so the full earth (radius 1) always stays
+    // inside the camera's 40°-FOV frame — past that point the sphere
+    // starts filling the whole square canvas edge-to-edge, which exposes
+    // the mount div's shape (circle) as a hard visible edge against the
+    // starfield instead of blending into it. Working backward from "at
+    // closest zoom, about 2x the continental US's ~4,500km width should be
+    // visible across the frame" (9,000km / Earth's 6,371km radius = 1.41
+    // sphere-radius units of frame width): distance = 1 (sphere radius) +
+    // 1.41 / (2 * tan(20°)) ≈ 2.94. That's also almost exactly the distance
+    // at which the bare sphere's silhouette exactly fills the FOV
+    // (arcsin(1/d) = 20° → d ≈ 2.92) — the two derivations agree, which is
+    // why this single distance satisfies both "double the US" and "always
+    // see the full globe." Rounded up slightly for a safety margin.
+    controls.minDistance = 3;
     controls.maxDistance = 6;
     controls.enablePan = false;
     const reduceMotion = window.matchMedia(

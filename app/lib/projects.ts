@@ -409,7 +409,7 @@ export const projects: Project[] = [
   },
   {
     slug: "granite-speech-fms",
-    title: "Granite Speech in Foundation Model Stack",
+    title: "Granite Speech in FMS",
     short: "Ported IBM's 8B-parameter Granite Speech model into IBM's Foundation Model Stack from scratch and validated it under torch.compile.",
     description: "An 8-week Columbia HPML research collaboration with IBM Research to port IBM's Granite Speech 3.3 8B model — a Conformer encoder, Q-Former projector, and LLM decoder speech-to-text architecture — out of Hugging Face Transformers and into IBM's Foundation Model Stack (FMS), a native PyTorch framework built for compiled, production-grade inference, so it runs end-to-end under torch.compile.",
     github: "https://github.com/columbia-hpml-granite",
