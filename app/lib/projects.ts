@@ -28,13 +28,12 @@ export interface Project {
 // NOTE on ordering: the desktop grid below (Projects.tsx) is a CSS
 // multi-column masonry layout (columns-2 md, columns-3 lg), which fills
 // column-by-column rather than row-by-row. Since collapsed cards are all the
-// same height, this array is ordered so that reading left-to-right,
-// top-to-bottom at the 3-column (lg) breakpoint produces the intended
-// sequence: bipedal-locomotion, action-segmentation-mice, tdnn-conformer-asr,
-// life-expectancy-analysis, wikipedia-article-clustering,
-// hierarchical-image-classifier, pos-tagger-state-space-model, then the
-// rest. That means the underlying array order below is column-major, not
-// the reading order itself.
+// same height, with N projects the browser splits them ceil(N/cols) per
+// column, filling column 1 first, then column 2, etc. — so the underlying
+// array order below is column-major, not the reading order itself. At the
+// current count (13), that's 5 per column 1 and 2, 3 in column 3: moving a
+// project to array index 10 puts it at the top of column 3 (row 1, col 3)
+// at the 3-column (lg) breakpoint. Re-derive that split if the count changes.
 export const projects: Project[] = [
   {
     slug: "bipedal-locomotion",
@@ -409,6 +408,33 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "granite-speech-fms",
+    title: "Granite Speech in Foundation Model Stack",
+    short: "Ported IBM's 8B-parameter Granite Speech model into IBM's Foundation Model Stack from scratch and validated it under torch.compile.",
+    description: "An 8-week Columbia HPML research collaboration with IBM Research to port IBM's Granite Speech 3.3 8B model — a Conformer encoder, Q-Former projector, and LLM decoder speech-to-text architecture — out of Hugging Face Transformers and into IBM's Foundation Model Stack (FMS), a native PyTorch framework built for compiled, production-grade inference, so it runs end-to-end under torch.compile.",
+    github: "https://github.com/columbia-hpml-granite",
+    visual: "pipeline",
+    tech: ["PyTorch", "torch.compile", "Foundation Model Stack", "Hugging Face Transformers", "Conformer", "Q-Former"],
+    problem:
+      "Granite Speech only existed as a Hugging Face Transformers implementation — research-friendly, but built with dynamic control flow and framework glue that resists graph tracing. Getting it running end-to-end under torch.compile inside FMS meant rebuilding the model's architecture natively rather than wrapping the existing one, while staying numerically identical to IBM's reference implementation.",
+    approach:
+      "Working with three Columbia HPML classmates (Aneesh Durai, Geonsik Moon, In Keun Kim), advised by IBM Research's Dr. Kaoutar El Maghraoui and Dr. Rashed Bhatti, reimplemented the Conformer encoder, Q-Former projector, and multimodal integration layer natively in FMS with zero Hugging Face dependencies in the new code path, built a weight-conversion pipeline to load IBM's original released checkpoints, and validated every component against both the reference HF implementation and its own torch.compile-traced form.",
+    highlights: [
+      "Reimplemented Granite Speech's Conformer encoder, Q-Former projector, and multimodal integration entirely natively in FMS — no Hugging Face dependency in the feature-extraction path",
+      "Built a full HF → FMS checkpoint weight-conversion pipeline so the ported model loads IBM's original released weights directly",
+      "157 tests across 9 files (~2,535 lines of production code, ~1,500+ lines of tests) covering unit correctness, numerical equivalence against HF, and torch.compile activation/output parity",
+      "Benchmarked end-to-end on an H200 GPU and found the model is decoder-bound — 96–99% of latency lives in the LLM decoder, meaning encoder-side compilation work has little effect on real end-to-end speed",
+    ],
+    technical: [
+      "Component test breakdown: 53 Conformer encoder tests (28 unit + 25 HF-equivalence), 20 Q-Former projector tests, 62 full Granite Speech model tests, 11 generation tests",
+      "Dedicated torch.compile parity suite (test_granite_speech_torch_compile.py) confirming compiled and eager execution stay numerically equivalent at each stage",
+      "Audio pipeline compresses a 16,000-sample (1s @ 16kHz) window down to ~7 tokens before it reaches the LLM decoder — roughly 2285× compression",
+      "146 CPU-only tests plus 8 GPU-only tests (numerical equivalence, compile parity, activation debugging) in the final validation suite",
+    ],
+    results:
+      "On an NVIDIA H200 GPU (bf16), end-to-end latency was 489.4ms for 3s of audio, 532.3ms for 10s, and 2662.2ms for 30s — with 96.4–99.3% of that time spent in the LLM decoder rather than the encoder (encoder latency stayed roughly flat at 17.7–18.8ms regardless of clip length). Throughput ranged 120.7–249.0 tokens/sec (real-time factor 0.053–0.163) depending on clip length.",
+  },
+  {
     slug: "trigram-language-model",
     title: "Trigram Language Model",
     short: "A dependency-free statistical language model applied to essay-proficiency classification.",
@@ -464,33 +490,6 @@ export const projects: Project[] = [
         caption: "The app's homepage.",
       },
     ],
-  },
-  {
-    slug: "granite-speech-fms",
-    title: "Granite Speech in Foundation Model Stack",
-    short: "Ported IBM's 8B-parameter Granite Speech model into IBM's Foundation Model Stack from scratch and validated it under torch.compile.",
-    description: "An 8-week Columbia HPML research collaboration with IBM Research to port IBM's Granite Speech 3.3 8B model — a Conformer encoder, Q-Former projector, and LLM decoder speech-to-text architecture — out of Hugging Face Transformers and into IBM's Foundation Model Stack (FMS), a native PyTorch framework built for compiled, production-grade inference, so it runs end-to-end under torch.compile.",
-    github: "https://github.com/columbia-hpml-granite/foundation-model-stack/tree/granite-speech",
-    visual: "pipeline",
-    tech: ["PyTorch", "torch.compile", "Foundation Model Stack", "Hugging Face Transformers", "Conformer", "Q-Former"],
-    problem:
-      "Granite Speech only existed as a Hugging Face Transformers implementation — research-friendly, but built with dynamic control flow and framework glue that resists graph tracing. Getting it running end-to-end under torch.compile inside FMS meant rebuilding the model's architecture natively rather than wrapping the existing one, while staying numerically identical to IBM's reference implementation.",
-    approach:
-      "Working with three Columbia HPML classmates (Aneesh Durai, Geonsik Moon, In Keun Kim), advised by IBM Research's Dr. Kaoutar El Maghraoui and Dr. Rashed Bhatti, reimplemented the Conformer encoder, Q-Former projector, and multimodal integration layer natively in FMS with zero Hugging Face dependencies in the new code path, built a weight-conversion pipeline to load IBM's original released checkpoints, and validated every component against both the reference HF implementation and its own torch.compile-traced form.",
-    highlights: [
-      "Reimplemented Granite Speech's Conformer encoder, Q-Former projector, and multimodal integration entirely natively in FMS — no Hugging Face dependency in the feature-extraction path",
-      "Built a full HF → FMS checkpoint weight-conversion pipeline so the ported model loads IBM's original released weights directly",
-      "157 tests across 9 files (~2,535 lines of production code, ~1,500+ lines of tests) covering unit correctness, numerical equivalence against HF, and torch.compile activation/output parity",
-      "Benchmarked end-to-end on an H200 GPU and found the model is decoder-bound — 96–99% of latency lives in the LLM decoder, meaning encoder-side compilation work has little effect on real end-to-end speed",
-    ],
-    technical: [
-      "Component test breakdown: 53 Conformer encoder tests (28 unit + 25 HF-equivalence), 20 Q-Former projector tests, 62 full Granite Speech model tests, 11 generation tests",
-      "Dedicated torch.compile parity suite (test_granite_speech_torch_compile.py) confirming compiled and eager execution stay numerically equivalent at each stage",
-      "Audio pipeline compresses a 16,000-sample (1s @ 16kHz) window down to ~7 tokens before it reaches the LLM decoder — roughly 2285× compression",
-      "146 CPU-only tests plus 8 GPU-only tests (numerical equivalence, compile parity, activation debugging) in the final validation suite",
-    ],
-    results:
-      "On an NVIDIA H200 GPU (bf16), end-to-end latency was 489.4ms for 3s of audio, 532.3ms for 10s, and 2662.2ms for 30s — with 96.4–99.3% of that time spent in the LLM decoder rather than the encoder (encoder latency stayed roughly flat at 17.7–18.8ms regardless of clip length). Throughput ranged 120.7–249.0 tokens/sec (real-time factor 0.053–0.163) depending on clip length.",
   },
 ];
 

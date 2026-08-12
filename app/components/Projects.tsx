@@ -112,6 +112,33 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
+// Splits items sequentially into `cols` groups (extra items biased to the
+// earlier columns) rather than CSS `columns-N`, which rebalances which item
+// lands in which column whenever a card's rendered height changes (e.g. the
+// hover-expand animation) — that reflow is what read as a card teleporting.
+// Assignment here is fixed at render time and never depends on layout.
+function chunkIntoColumns<T>(items: T[], cols: number): T[][] {
+  const perCol = Math.ceil(items.length / cols);
+  return Array.from({ length: cols }, (_, c) => items.slice(c * perCol, (c + 1) * perCol));
+}
+
+function DesktopColumns({ cols, className }: { cols: number; className: string }) {
+  const columns = chunkIntoColumns(projects, cols);
+  return (
+    <div className={`${className} gap-5`}>
+      {columns.map((col, ci) => (
+        <div key={ci} className="flex-1 flex flex-col gap-5">
+          {col.map((project, i) => (
+            <FadeIn key={project.title} delay={(ci + i) * 0.05}>
+              <ProjectCard project={project} />
+            </FadeIn>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function MobileCarousel() {
   const ref = useRef<HTMLDivElement>(null);
   const dragControls = useDragControls();
@@ -142,19 +169,11 @@ export default function Projects() {
     <section id="projects" className="py-24 max-w-6xl mx-auto px-6">
       <SectionHeading title="Projects" />
 
-      {/* Desktop masonry — each column flows independently so an expanding
-          card only pushes down items in its own column */}
-      <div className="hidden md:block md:columns-2 lg:columns-3 gap-5">
-        {projects.map((project, i) => (
-          <FadeIn
-            key={project.title}
-            delay={i * 0.05}
-            className="break-inside-avoid mb-5"
-          >
-            <ProjectCard project={project} />
-          </FadeIn>
-        ))}
-      </div>
+      {/* Desktop masonry — explicit column arrays (see chunkIntoColumns)
+          rather than CSS columns-N, so a card expanding on hover can't
+          shuffle which column any card belongs to. */}
+      <DesktopColumns cols={2} className="hidden md:flex lg:hidden" />
+      <DesktopColumns cols={3} className="hidden lg:flex" />
 
       {/* Mobile carousel */}
       <div className="md:hidden">
