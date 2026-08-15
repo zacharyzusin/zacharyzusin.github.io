@@ -310,44 +310,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "home-cooking-platform",
-    title: "Home Cooking Platform",
-    short: "A full-stack recipe platform with real multi-constraint search, not a toy CRUD demo.",
-    description: "Full-stack Flask + PostgreSQL web application with a 10-table relational schema and dynamic filtering that recommends recipes based on available ingredients, dietary restrictions, cuisine, and complexity — matching all selected constraints at once.",
-    github: "https://github.com/zacharyzusin/Home-Cooking-Helper",
-    visual: "ingredients",
-    tech: ["Flask", "PostgreSQL", "SQLAlchemy", "SQL"],
-    problem:
-      "Recipe apps often ignore practical constraints — what ingredients you actually have on hand, or real dietary restrictions — and just return anything that loosely matches a search term.",
-    approach:
-      "Built a full-stack Flask + PostgreSQL application around a real 10-table relational schema, with search logic that dynamically builds parameterized SQL to match ALL of a user's selected ingredients and dietary restrictions at once — not just any of them — plus session-based auth and a live-updating review/rating system.",
-    highlights: [
-      "10-table relational schema (users, recipes, ingredients, dietary restrictions, nutrition, flavor profiles, saves, reviews) with real indexes on the columns actually queried",
-      "Search correctly enforces \"match every selected filter\" using SQL GROUP BY + HAVING, rather than the common mistake of loosely matching any of them",
-      "Session-based auth with UUID primary keys and password-length validation",
-      "Posting a review updates the recipe's running average rating in the same transaction",
-      "Built with the Flask application-factory pattern and Blueprints, split cleanly into main/auth/recipe/user route modules",
-    ],
-    technical: [
-      "Schema: Users, Recipes (with FKs to NutritionalInfo and FlavorProfiles), Ingredients, Contains (recipe↔ingredient join), DietaryRestrictions + CompatibleWith (recipe↔restriction join), Saves, Reviews — indexed on UserID, CuisineType, and AverageRating",
-      "Search query joins Contains→Ingredients and CompatibleWith→DietaryRestrictions, groups by recipe, and uses HAVING COUNT(...) to require that a recipe matches every requested ingredient/restriction — the correct SQL pattern for \"match all\" filtering, as opposed to a naive WHERE...IN that would under-constrain results",
-      "All queries are raw, parameterized SQL via SQLAlchemy's text() rather than the ORM layer — a deliberate choice for direct control over the dynamic multi-table filter logic",
-      "Config layer defines 11 cuisine types and 3 complexity tiers (Beginner / Aspiring Chef / Master Chef) used consistently across search and recipe creation",
-    ],
-    images: [
-      {
-        src: "/projects/home-cooking-platform/home.png",
-        alt: "Home Cooking Helper search interface with ingredient, cuisine, and dietary restriction filters",
-        caption: "The multi-constraint search interface — filters combine via SQL GROUP BY/HAVING to require all selected constraints match.",
-      },
-      {
-        src: "/projects/home-cooking-platform/schema.png",
-        alt: "Entity-relationship diagram of the 10-table database schema",
-        caption: "The underlying 10-table relational schema.",
-      },
-    ],
-  },
-  {
     slug: "tdnn-conformer-asr",
     title: "TDNN-Conformer ASR",
     short: "A hybrid speech recognition architecture combining TDNN with the Conformer model.",
@@ -484,6 +446,44 @@ export const projects: Project[] = [
         src: "/projects/wonderful-workouts/home.png",
         alt: "Wonderful Workouts homepage",
         caption: "The app's homepage.",
+      },
+    ],
+  },
+  {
+    slug: "home-cooking-platform",
+    title: "Home Cooking Platform",
+    short: "A full-stack recipe platform with real multi-constraint search, not a toy CRUD demo.",
+    description: "Full-stack Flask + PostgreSQL web application with a 10-table relational schema and dynamic filtering that recommends recipes based on available ingredients, dietary restrictions, cuisine, and complexity — matching all selected constraints at once.",
+    github: "https://github.com/zacharyzusin/Home-Cooking-Helper",
+    visual: "ingredients",
+    tech: ["Flask", "PostgreSQL", "SQLAlchemy", "SQL"],
+    problem:
+      "Recipe apps often ignore practical constraints — what ingredients you actually have on hand, or real dietary restrictions — and just return anything that loosely matches a search term.",
+    approach:
+      "Built a full-stack Flask + PostgreSQL application around a real 10-table relational schema, with search logic that dynamically builds parameterized SQL to match ALL of a user's selected ingredients and dietary restrictions at once — not just any of them — plus session-based auth and a live-updating review/rating system.",
+    highlights: [
+      "10-table relational schema (users, recipes, ingredients, dietary restrictions, nutrition, flavor profiles, saves, reviews) with real indexes on the columns actually queried",
+      "Search correctly enforces \"match every selected filter\" using SQL GROUP BY + HAVING, rather than the common mistake of loosely matching any of them",
+      "Session-based auth with UUID primary keys and password-length validation",
+      "Posting a review updates the recipe's running average rating in the same transaction",
+      "Built with the Flask application-factory pattern and Blueprints, split cleanly into main/auth/recipe/user route modules",
+    ],
+    technical: [
+      "Schema: Users, Recipes (with FKs to NutritionalInfo and FlavorProfiles), Ingredients, Contains (recipe↔ingredient join), DietaryRestrictions + CompatibleWith (recipe↔restriction join), Saves, Reviews — indexed on UserID, CuisineType, and AverageRating",
+      "Search query joins Contains→Ingredients and CompatibleWith→DietaryRestrictions, groups by recipe, and uses HAVING COUNT(...) to require that a recipe matches every requested ingredient/restriction — the correct SQL pattern for \"match all\" filtering, as opposed to a naive WHERE...IN that would under-constrain results",
+      "All queries are raw, parameterized SQL via SQLAlchemy's text() rather than the ORM layer — a deliberate choice for direct control over the dynamic multi-table filter logic",
+      "Config layer defines 11 cuisine types and 3 complexity tiers (Beginner / Aspiring Chef / Master Chef) used consistently across search and recipe creation",
+    ],
+    images: [
+      {
+        src: "/projects/home-cooking-platform/home.png",
+        alt: "Home Cooking Helper search interface with ingredient, cuisine, and dietary restriction filters",
+        caption: "The multi-constraint search interface — filters combine via SQL GROUP BY/HAVING to require all selected constraints match.",
+      },
+      {
+        src: "/projects/home-cooking-platform/schema.png",
+        alt: "Entity-relationship diagram of the 10-table database schema",
+        caption: "The underlying 10-table relational schema.",
       },
     ],
   },
