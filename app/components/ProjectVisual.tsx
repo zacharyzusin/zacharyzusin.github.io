@@ -756,6 +756,27 @@ function alignment(ctx: CanvasRenderingContext2D, w: number, h: number, t: numbe
     ctx.fillStyle = ACCENT_LIGHT;
     ctx.fill();
   }
+
+  // A minimal legend — otherwise the two lines are unlabeled, unlike every
+  // other visual on the site. Fixed position (not tracked to the animated
+  // line ends) so it never overlaps the plot as the reveal cycles.
+  ctx.font = "600 7px monospace";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  const legendY = h * 0.09;
+  ctx.beginPath();
+  ctx.arc(marginX + 2, legendY - 2, 2, 0, Math.PI * 2);
+  ctx.fillStyle = ACCENT_LIGHT;
+  ctx.fill();
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText("FOREVER", marginX + 8, legendY);
+  const secondX = marginX + 8 + ctx.measureText("FOREVER").width + 10;
+  ctx.beginPath();
+  ctx.arc(secondX, legendY - 2, 2, 0, Math.PI * 2);
+  ctx.fillStyle = ACCENT;
+  ctx.fill();
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText("typical method", secondX + 6, legendY);
 }
 
 const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => void> = {
