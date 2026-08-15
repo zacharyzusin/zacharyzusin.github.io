@@ -570,7 +570,6 @@ function pipeline(ctx: CanvasRenderingContext2D, w: number, h: number, t: number
   const uh = Math.max(10, h - uy - 6);
   for (let i = 0; i < n; i++) {
     const ux = xs[i];
-    const cx = ux + bw / 2;
 
     if (i === 0) {
       // Audio: the raw input waveform.
@@ -587,36 +586,57 @@ function pipeline(ctx: CanvasRenderingContext2D, w: number, h: number, t: number
       ctx.stroke();
       ctx.globalAlpha = 1;
     } else if (i === 1) {
-      // Encoder: the Conformer's conv/attention window scanning across a
-      // row of extracted feature bars.
+      // Encoder: a scanning window "reads" a row of feature bars — the
+      // Conformer's local conv/attention receptive field moving across the
+      // sequence. Bars under the window light up brighter than the rest so
+      // the window and what it's "looking at" read as one connected idea,
+      // not two independent animations.
       const bars = 6;
       const bbw = bw / bars;
+      const winPos = (t * 0.9) % (bars - 1); // window spans [winPos, winPos+2)
       for (let b = 0; b < bars; b++) {
-        const barH = uh * (0.35 + 0.35 * (Math.sin(b * 1.3 + t * 3) * 0.5 + 0.5));
-        ctx.fillStyle = ACCENT;
-        ctx.globalAlpha = 0.5;
+        const covered = b >= winPos && b < winPos + 2;
+        const barH = uh * (0.3 + 0.3 * (Math.sin(b * 1.3 + t * 2) * 0.5 + 0.5));
+        ctx.fillStyle = covered ? ACCENT_LIGHT : ACCENT;
+        ctx.globalAlpha = covered ? 0.9 : 0.35;
         ctx.fillRect(ux + b * bbw + 1, uy + uh - barH, bbw - 2, barH);
       }
       ctx.globalAlpha = 1;
-      const winPos = (t * 0.9) % (bars - 1);
       ctx.strokeStyle = ACCENT_LIGHT;
       ctx.lineWidth = 1;
       ctx.globalAlpha = 0.8;
       ctx.strokeRect(ux + winPos * bbw, uy, bbw * 2, uh);
       ctx.globalAlpha = 1;
     } else if (i === 2) {
-      // Projector: many encoder frames compressing down into a handful of
-      // query tokens — points drift inward toward center and shrink.
-      const dots = 5;
+      // Projector: many encoder-timestep features compress down into a
+      // handful of query tokens. Small dots enter from the left (many
+      // inputs) and flow rightward into 2 fixed collector points (few
+      // outputs), which pulse as dots arrive — a "many merge into few"
+      // read that also keeps the same left-to-right flow as the rest of
+      // the pipeline, instead of an unrelated top-to-bottom motion.
+      const dots = 6;
+      const collectors = [ux + bw * 0.78, ux + bw * 0.94];
+      const collectorY = uy + uh * 0.5;
       for (let d = 0; d < dots; d++) {
-        const phase = (t * 0.6 + d / dots) % 1;
-        const startX = ux + (d / (dots - 1)) * bw;
-        const px = startX + (cx - startX) * phase;
-        const py = uy + phase * uh;
+        const phase = (t * 0.5 + d / dots) % 1;
+        const startX = ux + 2;
+        const startY = uy + ((d % 3) / 2) * uh;
+        const targetX = collectors[d % collectors.length];
+        const px = startX + (targetX - startX) * phase;
+        const py = startY + (collectorY - startY) * phase;
         ctx.beginPath();
-        ctx.arc(px, py, 2.2 * (1 - phase * 0.6), 0, Math.PI * 2);
+        ctx.arc(px, py, 2 * (1 - phase * 0.5), 0, Math.PI * 2);
         ctx.fillStyle = ACCENT_LIGHT;
         ctx.globalAlpha = 0.85 * (1 - phase * 0.3);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      for (const cxCollector of collectors) {
+        const pulse = 0.5 + 0.5 * Math.sin(t * 3 + cxCollector);
+        ctx.beginPath();
+        ctx.arc(cxCollector, collectorY, 2.5 + pulse * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = ACCENT_LIGHT;
+        ctx.globalAlpha = 0.4 + pulse * 0.4;
         ctx.fill();
       }
       ctx.globalAlpha = 1;
