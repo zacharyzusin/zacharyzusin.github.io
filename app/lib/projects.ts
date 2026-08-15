@@ -25,13 +25,11 @@ export interface Project {
   images?: ProjectImage[];
 }
 
-// NOTE on ordering: the desktop grid (Projects.tsx's chunkIntoColumns) splits
-// this array into N equal-ish columns — ceil(count/cols) items in column 1,
-// then column 2, etc. — filling column-by-column, not row-by-row. So the
-// array order below is column-major, not the reading order itself. At the
-// current count (13) with 3 columns, that's 5/5/3 per column: array index 0
-// is row 1 col 1, index 1 is row 2 col 1, index 5 is row 1 col 2, index 10 is
-// row 1 col 3. Re-derive that split if the count changes.
+// NOTE on ordering: the desktop grid (Projects.tsx) is a plain CSS Grid
+// (grid-cols-2 md, grid-cols-3 lg), which fills row-major — left to right,
+// top to bottom — so the array order below IS the reading order. At the
+// 3-column (lg) breakpoint, array index i lands at row floor(i/3)+1,
+// col (i%3)+1: e.g. index 1 is row 1 col 2, index 5 is row 2 col 3.
 export const projects: Project[] = [
   {
     slug: "bipedal-locomotion",

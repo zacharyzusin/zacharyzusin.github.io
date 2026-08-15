@@ -112,33 +112,6 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-// Splits items sequentially into `cols` groups (extra items biased to the
-// earlier columns) rather than CSS `columns-N`, which rebalances which item
-// lands in which column whenever a card's rendered height changes (e.g. the
-// hover-expand animation) — that reflow is what read as a card teleporting.
-// Assignment here is fixed at render time and never depends on layout.
-function chunkIntoColumns<T>(items: T[], cols: number): T[][] {
-  const perCol = Math.ceil(items.length / cols);
-  return Array.from({ length: cols }, (_, c) => items.slice(c * perCol, (c + 1) * perCol));
-}
-
-function DesktopColumns({ cols, className }: { cols: number; className: string }) {
-  const columns = chunkIntoColumns(projects, cols);
-  return (
-    <div className={`${className} gap-5`}>
-      {columns.map((col, ci) => (
-        <div key={ci} className="flex-1 flex flex-col gap-5">
-          {col.map((project, i) => (
-            <FadeIn key={project.title} delay={(ci + i) * 0.05}>
-              <ProjectCard project={project} />
-            </FadeIn>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function MobileCarousel() {
   const ref = useRef<HTMLDivElement>(null);
   const dragControls = useDragControls();
@@ -169,11 +142,24 @@ export default function Projects() {
     <section id="projects" className="py-24 max-w-6xl mx-auto px-6">
       <SectionHeading title="Projects" />
 
-      {/* Desktop masonry — explicit column arrays (see chunkIntoColumns)
-          rather than CSS columns-N, so a card expanding on hover can't
-          shuffle which column any card belongs to. */}
-      <DesktopColumns cols={2} className="hidden md:flex lg:hidden" />
-      <DesktopColumns cols={3} className="hidden lg:flex" />
+      {/* Desktop grid — row-major CSS Grid (2 cols md, 3 cols lg), so cards
+          fill left-to-right/top-to-bottom like a normal grid: any leftover
+          slot (count not divisible by the column count) ends up as a single
+          trailing gap at the end, not two whole short columns the way
+          splitting the array into fixed-size column chunks did. items-start
+          keeps each card at its own natural height instead of being
+          stretched to match the tallest card in its row — an expanding
+          card only grows the row's track height (pushing later rows down),
+          it never reassigns which cell any card belongs to, so this also
+          avoids the CSS-multi-column "card teleports to a different
+          column" bug this replaced. */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+        {projects.map((project, i) => (
+          <FadeIn key={project.title} delay={i * 0.05}>
+            <ProjectCard project={project} />
+          </FadeIn>
+        ))}
+      </div>
 
       {/* Mobile carousel */}
       <div className="md:hidden">
