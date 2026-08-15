@@ -210,6 +210,35 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "continual-alignment-preservation",
+    title: "LLM Alignment Preservation",
+    short: "A research paper evaluating whether continual learning methods can stop an LLM's safety alignment from eroding across a long fine-tuning pipeline.",
+    description: "A research paper (with Daniel Ben-Levi, Columbia University) on the \"alignment tax\" — the tendency for a safety-aligned LLM to lose that alignment as it's fine-tuned on unrelated, entirely benign capability tasks. Reframes the problem as catastrophic forgetting and runs the first evaluation of state-of-the-art continual learning methods across a realistic 7-task sequential fine-tuning chain, instead of the two-stage settings prior work relied on.",
+    github: "https://github.com/zacharyzusin/clmm-project",
+    visual: "alignment",
+    tech: ["PyTorch", "LoRA", "Continual Learning", "LLM Safety Alignment", "Llama 2", "Qwen3"],
+    problem:
+      "Fine-tuning a safety-aligned LLM on benign capability data degrades its safety alignment — the \"alignment tax.\" Prior work treats this as a two-stage problem (align once, then fine-tune once), which can't reveal the failure modes that accumulate across the longer, multi-stage capability fine-tuning chains real deployment pipelines actually use.",
+    approach:
+      "Reframed alignment preservation as a continual learning problem and ran the first evaluation of four state-of-the-art LLM continual learning methods — FOREVER, EWC-DR, CLoRA, and O-LoRA — across a novel 7-task sequential chain (safety alignment, then GSM8K, SST-2, MBPP, XSum, SciQ, SAMSum). Built \"Safety-\" variants of each method by injecting three heuristics drawn from the alignment literature — narrow safety-basin protection, early-token logit preservation, and early-layer regularization against spurious forgetting — to test whether they generalize beyond the two-task settings they were designed for.",
+    highlights: [
+      "Ran the first evaluation of SOTA continual learning methods on true multi-task (7-stage) alignment preservation, instead of the two-stage settings used by prior work",
+      "FOREVER and Safety-FOREVER were the only methods to near-preserve alignment through the full 7-task chain on Llama-2-7B (6.9% / 13.7% attack success rate at the final stage vs. a 0.4–0.6% baseline) — every other method degraded by at least 17 percentage points, most by 40+",
+      "Found O-LoRA and Safety-O-LoRA collapse completely and immediately (96.7–100% attack success rate) — traced the failure to a structural incompatibility between the method's orthogonality constraint and safety preservation via a subspace-overlap analysis, not to any one task (SST-2 overlaps the safety subspace 4.33× more than GSM8K)",
+      "Showed safety-augmented variants don't reliably outperform their base methods — improvements from the two-task literature transfer inconsistently to true multi-task settings, and are model-dependent (helping Qwen3-0.6B-Base while sometimes hurting Llama-2-7B)",
+      "Demonstrated that keyword-matching attack-success metrics systematically overcount failures for constraint-based methods relative to LlamaGuard's semantic judgment (e.g. 31.7% keyword vs. 6.3% LlamaGuard for Safety-CLoRA), motivating joint evaluation with both",
+    ],
+    technical: [
+      "Evaluated on Qwen3-0.6B-Base and Llama-2-7B (both aligned on 10,000 WildJailbreak examples: 5,000 benign, 5,000 harmful), with all methods using rank-8 LoRA adapters (α=16, dropout 0.05) on q_proj/v_proj",
+      "FOREVER schedules safety-example replay along an Ebbinghaus-style forgetting curve keyed to accumulated parameter drift rather than raw training steps; Safety-FOREVER adds a 1.5× stronger regularization penalty to the first four layers during replay",
+      "EWC-DR fixes a vanishing-gradient flaw in standard EWC's Fisher-information importance estimate by computing importance on negated pre-softmax logits, restoring gradient magnitude for safety-critical parameters the model is already confident about",
+      "Safety-CLoRA derives its protected-direction subspace directly from the SVD of the aligned-minus-base parameter delta (ΔW), rather than CLoRA's original pre-specified or random directions",
+      "Measured attack success rate two ways on 520 held-out AdvBench harmful prompts: keyword matching on the first 80 characters (surface-level) and LlamaGuard-3-8B harmfulness judgments (deep alignment)",
+    ],
+    results:
+      "On Llama-2-7B's full 7-task chain, FOREVER and Safety-FOREVER held final-stage attack success rate to 6.9% and 13.7% respectively, against a 0.4–0.6% post-alignment baseline — the only methods to stay within striking distance of it. Every other evaluated method (LoRA, CLoRA-random, Safety-CLoRA, O-LoRA, Safety-O-LoRA, EWC-DR, Safety-EWC-DR) degraded by at least 17 percentage points by the final stage, with most exceeding 40. O-LoRA and Safety-O-LoRA collapsed to 96.7–100% attack success rate immediately at the second task. SciQ and SST-2 were consistently the most dangerous individual tasks across both models and nearly every method, while GSM8K, MBPP, and XSum caused comparatively modest degradation.",
+  },
+  {
     slug: "pos-tagger-state-space-model",
     title: "State Space Model POS Tagger",
     short: "A part-of-speech tagger with hand-derived forward and backward passes through a state-space model — no autodiff.",
@@ -486,35 +515,6 @@ export const projects: Project[] = [
         caption: "The underlying 10-table relational schema.",
       },
     ],
-  },
-  {
-    slug: "continual-alignment-preservation",
-    title: "LLM Alignment Preservation",
-    short: "A research paper evaluating whether continual learning methods can stop an LLM's safety alignment from eroding across a long fine-tuning pipeline.",
-    description: "A research paper (with Daniel Ben-Levi, Columbia University) on the \"alignment tax\" — the tendency for a safety-aligned LLM to lose that alignment as it's fine-tuned on unrelated, entirely benign capability tasks. Reframes the problem as catastrophic forgetting and runs the first evaluation of state-of-the-art continual learning methods across a realistic 7-task sequential fine-tuning chain, instead of the two-stage settings prior work relied on.",
-    github: "https://github.com/zacharyzusin/clmm-project",
-    visual: "alignment",
-    tech: ["PyTorch", "LoRA", "Continual Learning", "LLM Safety Alignment", "Llama 2", "Qwen3"],
-    problem:
-      "Fine-tuning a safety-aligned LLM on benign capability data degrades its safety alignment — the \"alignment tax.\" Prior work treats this as a two-stage problem (align once, then fine-tune once), which can't reveal the failure modes that accumulate across the longer, multi-stage capability fine-tuning chains real deployment pipelines actually use.",
-    approach:
-      "Reframed alignment preservation as a continual learning problem and ran the first evaluation of four state-of-the-art LLM continual learning methods — FOREVER, EWC-DR, CLoRA, and O-LoRA — across a novel 7-task sequential chain (safety alignment, then GSM8K, SST-2, MBPP, XSum, SciQ, SAMSum). Built \"Safety-\" variants of each method by injecting three heuristics drawn from the alignment literature — narrow safety-basin protection, early-token logit preservation, and early-layer regularization against spurious forgetting — to test whether they generalize beyond the two-task settings they were designed for.",
-    highlights: [
-      "Ran the first evaluation of SOTA continual learning methods on true multi-task (7-stage) alignment preservation, instead of the two-stage settings used by prior work",
-      "FOREVER and Safety-FOREVER were the only methods to near-preserve alignment through the full 7-task chain on Llama-2-7B (6.9% / 13.7% attack success rate at the final stage vs. a 0.4–0.6% baseline) — every other method degraded by at least 17 percentage points, most by 40+",
-      "Found O-LoRA and Safety-O-LoRA collapse completely and immediately (96.7–100% attack success rate) — traced the failure to a structural incompatibility between the method's orthogonality constraint and safety preservation via a subspace-overlap analysis, not to any one task (SST-2 overlaps the safety subspace 4.33× more than GSM8K)",
-      "Showed safety-augmented variants don't reliably outperform their base methods — improvements from the two-task literature transfer inconsistently to true multi-task settings, and are model-dependent (helping Qwen3-0.6B-Base while sometimes hurting Llama-2-7B)",
-      "Demonstrated that keyword-matching attack-success metrics systematically overcount failures for constraint-based methods relative to LlamaGuard's semantic judgment (e.g. 31.7% keyword vs. 6.3% LlamaGuard for Safety-CLoRA), motivating joint evaluation with both",
-    ],
-    technical: [
-      "Evaluated on Qwen3-0.6B-Base and Llama-2-7B (both aligned on 10,000 WildJailbreak examples: 5,000 benign, 5,000 harmful), with all methods using rank-8 LoRA adapters (α=16, dropout 0.05) on q_proj/v_proj",
-      "FOREVER schedules safety-example replay along an Ebbinghaus-style forgetting curve keyed to accumulated parameter drift rather than raw training steps; Safety-FOREVER adds a 1.5× stronger regularization penalty to the first four layers during replay",
-      "EWC-DR fixes a vanishing-gradient flaw in standard EWC's Fisher-information importance estimate by computing importance on negated pre-softmax logits, restoring gradient magnitude for safety-critical parameters the model is already confident about",
-      "Safety-CLoRA derives its protected-direction subspace directly from the SVD of the aligned-minus-base parameter delta (ΔW), rather than CLoRA's original pre-specified or random directions",
-      "Measured attack success rate two ways on 520 held-out AdvBench harmful prompts: keyword matching on the first 80 characters (surface-level) and LlamaGuard-3-8B harmfulness judgments (deep alignment)",
-    ],
-    results:
-      "On Llama-2-7B's full 7-task chain, FOREVER and Safety-FOREVER held final-stage attack success rate to 6.9% and 13.7% respectively, against a 0.4–0.6% post-alignment baseline — the only methods to stay within striking distance of it. Every other evaluated method (LoRA, CLoRA-random, Safety-CLoRA, O-LoRA, Safety-O-LoRA, EWC-DR, Safety-EWC-DR) degraded by at least 17 percentage points by the final stage, with most exceeding 40. O-LoRA and Safety-O-LoRA collapsed to 96.7–100% attack success rate immediately at the second task. SciQ and SST-2 were consistently the most dangerous individual tasks across both models and nearly every method, while GSM8K, MBPP, and XSum caused comparatively modest degradation.",
   },
 ];
 
