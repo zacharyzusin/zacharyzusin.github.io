@@ -562,21 +562,78 @@ function pipeline(ctx: CanvasRenderingContext2D, w: number, h: number, t: number
   }
   ctx.textAlign = "left";
 
-  // small waveform under the "Audio" stage so the input is legible at a glance
-  const wx = xs[0];
-  const wy = y + bh + 16;
-  ctx.strokeStyle = ACCENT_LIGHT;
-  ctx.lineWidth = 1.2;
-  ctx.globalAlpha = 0.7;
-  ctx.beginPath();
-  for (let i = 0; i <= bw; i += 3) {
-    const amp = Math.sin(i * 0.6 + t * 6) * 0.5 + 0.5;
-    const yy = wy + Math.sin(i * 0.4) * amp * 6;
-    if (i === 0) ctx.moveTo(wx + i, yy);
-    else ctx.lineTo(wx + i, yy);
+  // A small, distinct moving element under each stage, hinting at what that
+  // stage actually does rather than just decorating it. Sized off `uh` (not
+  // fixed pixels) so it holds up at both the card's small preview height and
+  // the project page's much taller one.
+  const uy = y + bh + 14;
+  const uh = Math.max(10, h - uy - 6);
+  for (let i = 0; i < n; i++) {
+    const ux = xs[i];
+    const cx = ux + bw / 2;
+
+    if (i === 0) {
+      // Audio: the raw input waveform.
+      ctx.strokeStyle = ACCENT_LIGHT;
+      ctx.lineWidth = 1.2;
+      ctx.globalAlpha = 0.7;
+      ctx.beginPath();
+      for (let px = 0; px <= bw; px += 3) {
+        const amp = Math.sin(px * 0.6 + t * 6) * 0.5 + 0.5;
+        const yy = uy + uh / 2 + Math.sin(px * 0.4) * amp * (uh * 0.4);
+        if (px === 0) ctx.moveTo(ux + px, yy);
+        else ctx.lineTo(ux + px, yy);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    } else if (i === 1) {
+      // Encoder: the Conformer's conv/attention window scanning across a
+      // row of extracted feature bars.
+      const bars = 6;
+      const bbw = bw / bars;
+      for (let b = 0; b < bars; b++) {
+        const barH = uh * (0.35 + 0.35 * (Math.sin(b * 1.3 + t * 3) * 0.5 + 0.5));
+        ctx.fillStyle = ACCENT;
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(ux + b * bbw + 1, uy + uh - barH, bbw - 2, barH);
+      }
+      ctx.globalAlpha = 1;
+      const winPos = (t * 0.9) % (bars - 1);
+      ctx.strokeStyle = ACCENT_LIGHT;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.8;
+      ctx.strokeRect(ux + winPos * bbw, uy, bbw * 2, uh);
+      ctx.globalAlpha = 1;
+    } else if (i === 2) {
+      // Projector: many encoder frames compressing down into a handful of
+      // query tokens — points drift inward toward center and shrink.
+      const dots = 5;
+      for (let d = 0; d < dots; d++) {
+        const phase = (t * 0.6 + d / dots) % 1;
+        const startX = ux + (d / (dots - 1)) * bw;
+        const px = startX + (cx - startX) * phase;
+        const py = uy + phase * uh;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.2 * (1 - phase * 0.6), 0, Math.PI * 2);
+        ctx.fillStyle = ACCENT_LIGHT;
+        ctx.globalAlpha = 0.85 * (1 - phase * 0.3);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    } else {
+      // LLM: generated output tokens appearing one at a time.
+      const maxTokens = 5;
+      const shown = Math.floor((t * 1.6) % (maxTokens + 1));
+      const tokw = (bw - 2 * (maxTokens - 1)) / maxTokens;
+      for (let k = 0; k < shown; k++) {
+        const isNewest = k === shown - 1;
+        ctx.fillStyle = isNewest ? ACCENT_LIGHT : ACCENT;
+        ctx.globalAlpha = isNewest ? 0.9 : 0.5;
+        ctx.fillRect(ux + k * (tokw + 2), uy + uh * 0.35, tokw, uh * 0.3);
+      }
+      ctx.globalAlpha = 1;
+    }
   }
-  ctx.stroke();
-  ctx.globalAlpha = 1;
 }
 
 const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => void> = {
