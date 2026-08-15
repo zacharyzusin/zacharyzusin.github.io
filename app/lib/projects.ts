@@ -92,6 +92,90 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "granite-speech-fms",
+    title: "Granite Speech in FMS",
+    short: "Ported IBM's 8B-parameter Granite Speech model into IBM's Foundation Model Stack from scratch and validated it under torch.compile.",
+    description: "An 8-week Columbia HPML research collaboration with IBM Research to port IBM's Granite Speech 3.3 8B model — a Conformer encoder, Q-Former projector, and LLM decoder speech-to-text architecture — out of Hugging Face Transformers and into IBM's Foundation Model Stack (FMS), a native PyTorch framework built for compiled, production-grade inference, so it runs end-to-end under torch.compile.",
+    github: "https://github.com/columbia-hpml-granite",
+    visual: "pipeline",
+    tech: ["PyTorch", "torch.compile", "Foundation Model Stack", "Hugging Face Transformers", "Conformer", "Q-Former"],
+    problem:
+      "Granite Speech only existed as a Hugging Face Transformers implementation — research-friendly, but built with dynamic control flow and framework glue that resists graph tracing. Getting it running end-to-end under torch.compile inside FMS meant rebuilding the model's architecture natively rather than wrapping the existing one, while staying numerically identical to IBM's reference implementation.",
+    approach:
+      "Working with three Columbia HPML classmates (Aneesh Durai, Geonsik Moon, In Keun Kim), advised by IBM Research's Dr. Kaoutar El Maghraoui and Dr. Rashed Bhatti, reimplemented the Conformer encoder, Q-Former projector, and multimodal integration layer natively in FMS with zero Hugging Face dependencies in the new code path, built a weight-conversion pipeline to load IBM's original released checkpoints, and validated every component against both the reference HF implementation and its own torch.compile-traced form.",
+    highlights: [
+      "Reimplemented Granite Speech's Conformer encoder, Q-Former projector, and multimodal integration entirely natively in FMS — no Hugging Face dependency in the feature-extraction path",
+      "Built a full HF → FMS checkpoint weight-conversion pipeline so the ported model loads IBM's original released weights directly",
+      "157 tests across 9 files (~2,535 lines of production code, ~1,500+ lines of tests) covering unit correctness, numerical equivalence against HF, and torch.compile activation/output parity",
+      "Benchmarked end-to-end on an H200 GPU and found the model is decoder-bound — 96–99% of latency lives in the LLM decoder, meaning encoder-side compilation work has little effect on real end-to-end speed",
+    ],
+    technical: [
+      "Component test breakdown: 53 Conformer encoder tests (28 unit + 25 HF-equivalence), 20 Q-Former projector tests, 62 full Granite Speech model tests, 11 generation tests",
+      "Dedicated torch.compile parity suite (test_granite_speech_torch_compile.py) confirming compiled and eager execution stay numerically equivalent at each stage",
+      "Audio pipeline compresses a 16,000-sample (1s @ 16kHz) window down to ~7 tokens before it reaches the LLM decoder — roughly 2285× compression",
+      "146 CPU-only tests plus 8 GPU-only tests (numerical equivalence, compile parity, activation debugging) in the final validation suite",
+    ],
+    results:
+      "On an NVIDIA H200 GPU (bf16), end-to-end latency was 489.4ms for 3s of audio, 532.3ms for 10s, and 2662.2ms for 30s — with 96.4–99.3% of that time spent in the LLM decoder rather than the encoder (encoder latency stayed roughly flat at 17.7–18.8ms regardless of clip length). Throughput ranged 120.7–249.0 tokens/sec (real-time factor 0.053–0.163) depending on clip length.",
+  },
+  {
+    slug: "action-segmentation-mice",
+    title: "Action Segmentation in Mice",
+    short: "An evaluation pipeline for a neural behavior classifier used in computational neuroscience research.",
+    description: "Diagnostic and behavioral-fingerprinting pipeline built around a Temporal Convolutional Network model, evaluating its classification of mouse behavior from multi-modal time-series data across 57 research sessions.",
+    github: "https://github.com/zacharyzusin/Neuroscience-Research",
+    visual: "timeseries",
+    tech: ["Python", "PyTorch", "UMAP", "OpenCV", "Time-Series Analysis"],
+    problem:
+      "Understanding animal behavior from continuous pose-tracking and sensor data requires segmenting it into discrete, meaningful actions — and once you have a model that does that, you need real tooling to check whether its predictions actually hold up across many different recording sessions and labs, not just one dataset.",
+    approach:
+      "Built the evaluation and behavioral-fingerprinting pipeline around DAART, a pretrained Temporal Convolutional Network classifier from the International Brain Laboratory (IBL), applying it across 57 real research sessions spanning 8 different labs — pulling data via the IBL's own ONE API and validating predictions both quantitatively and qualitatively.",
+    highlights: [
+      "Wrote a custom non-uniform Savitzky-Golay filter to smooth pose-tracking data that had irregular dropped/missing frames — the standard scipy implementation only handles uniformly-sampled data",
+      "Built an 88-dimensional behavioral \"fingerprint\" per trial (state-duration histograms across time bins and task periods) and visualized cross-session structure with UMAP",
+      "Validated the model two ways: quantitatively via macro-averaged F1 agreement scores and event-aligned heatmaps, and qualitatively via frame-by-frame video overlays of predicted states against real footage",
+      "Pulled real multi-lab data (57 sessions, 8 IBL labs) via the IBL's ONE API and brainbox tooling, not a single canned dataset",
+    ],
+    technical: [
+      "Loaded a pretrained daart.models.Segmenter (TCN) via PyTorch state dict, ran inference across sessions pulled with one.api.ONE and brainbox.io.one.SessionLoader",
+      "Custom non-uniform Savitzky-Golay smoothing: fits a least-squares polynomial per window to handle irregular timestamps from dropped tracking frames, rather than assuming uniform sampling",
+      "Feature engineering: pose markers combined with interpolated wheel velocity and derived acceleration, Z-scored, batched at sequence length 15",
+      "Behavioral fingerprint: 11 time bins × 2 task periods × 4 behavioral states of state-duration histograms → 88-dim vector per trial → UMAP for 2D cross-session visualization",
+    ],
+    images: [
+      {
+        src: "/projects/action-segmentation-mice/mice-architecture.png",
+        alt: "DAART semi-supervised temporal convolutional network architecture diagram",
+        caption: "The DAART model: an encoder maps behavioral features to a latent embedding, classified against sparse hand labels and dense heuristic labels, with a predictor forecasting future features for self-supervision.",
+      },
+      {
+        src: "/projects/action-segmentation-mice/behavior-panel.png",
+        alt: "Composite figure: video-overlay frames per behavioral state, paw-speed transition plots, and aligned discrete-state heatmaps",
+        caption: "Top: video frames overlaid with paw position per predicted state (Still, Move, Wheel Turn, Groom). Middle: paw speed aligned to state transitions across trials. Bottom: predicted-state heatmaps for one session, split by correct vs. incorrect trials.",
+      },
+      {
+        src: "/projects/action-segmentation-mice/mice-smoothing-validation.png",
+        alt: "Model inference compared across Dropbox, IBL, and IBL-smoothed datasets",
+        caption: "Validating the custom smoothing filter: state predictions and time-spent-per-state stay consistent whether run on the original data or the Savitzky-Golay-smoothed version.",
+      },
+      {
+        src: "/projects/action-segmentation-mice/mice-trial-based.png",
+        alt: "Per-trial predicted state timeline aligned with wheel velocity and paw position traces",
+        caption: "Two individual trials: predicted state sequence lined up against raw wheel velocity and paw position, showing the classifier tracking real behavioral transitions.",
+      },
+      {
+        src: "/projects/action-segmentation-mice/mice-histograms.png",
+        alt: "Histograms of time spent in each behavioral state across two trial periods",
+        caption: "The raw material for the 88-dim behavioral fingerprint: state-duration histograms across 11 time bins, split by trial period (first movement to feedback vs. feedback to trial end).",
+      },
+      {
+        src: "/projects/action-segmentation-mice/mice-umap.png",
+        alt: "UMAP projection of behavioral fingerprints across sessions and trial splits",
+        caption: "UMAP projection of the 88-dim behavioral fingerprint — left: across sessions from two data sources; right: even vs. odd trials within a session, checking that a mouse's behavioral signature stays consistent.",
+      },
+    ],
+  },
+  {
     slug: "life-expectancy-analysis",
     title: "Life Expectancy Analysis",
     short: "A statistical regression study validated with both a holdout split and 5-fold cross-validation.",
@@ -199,33 +283,6 @@ export const projects: Project[] = [
       "Notable design choice: clustering runs on the 2D UMAP-reduced coordinates rather than the original embedding space — trades some cluster fidelity for the ability to directly visualize and select clusters spatially",
       "Visualization: interactive Plotly scatter, points hover-labeled with the source article title",
     ],
-  },
-  {
-    slug: "granite-speech-fms",
-    title: "Granite Speech in FMS",
-    short: "Ported IBM's 8B-parameter Granite Speech model into IBM's Foundation Model Stack from scratch and validated it under torch.compile.",
-    description: "An 8-week Columbia HPML research collaboration with IBM Research to port IBM's Granite Speech 3.3 8B model — a Conformer encoder, Q-Former projector, and LLM decoder speech-to-text architecture — out of Hugging Face Transformers and into IBM's Foundation Model Stack (FMS), a native PyTorch framework built for compiled, production-grade inference, so it runs end-to-end under torch.compile.",
-    github: "https://github.com/columbia-hpml-granite",
-    visual: "pipeline",
-    tech: ["PyTorch", "torch.compile", "Foundation Model Stack", "Hugging Face Transformers", "Conformer", "Q-Former"],
-    problem:
-      "Granite Speech only existed as a Hugging Face Transformers implementation — research-friendly, but built with dynamic control flow and framework glue that resists graph tracing. Getting it running end-to-end under torch.compile inside FMS meant rebuilding the model's architecture natively rather than wrapping the existing one, while staying numerically identical to IBM's reference implementation.",
-    approach:
-      "Working with three Columbia HPML classmates (Aneesh Durai, Geonsik Moon, In Keun Kim), advised by IBM Research's Dr. Kaoutar El Maghraoui and Dr. Rashed Bhatti, reimplemented the Conformer encoder, Q-Former projector, and multimodal integration layer natively in FMS with zero Hugging Face dependencies in the new code path, built a weight-conversion pipeline to load IBM's original released checkpoints, and validated every component against both the reference HF implementation and its own torch.compile-traced form.",
-    highlights: [
-      "Reimplemented Granite Speech's Conformer encoder, Q-Former projector, and multimodal integration entirely natively in FMS — no Hugging Face dependency in the feature-extraction path",
-      "Built a full HF → FMS checkpoint weight-conversion pipeline so the ported model loads IBM's original released weights directly",
-      "157 tests across 9 files (~2,535 lines of production code, ~1,500+ lines of tests) covering unit correctness, numerical equivalence against HF, and torch.compile activation/output parity",
-      "Benchmarked end-to-end on an H200 GPU and found the model is decoder-bound — 96–99% of latency lives in the LLM decoder, meaning encoder-side compilation work has little effect on real end-to-end speed",
-    ],
-    technical: [
-      "Component test breakdown: 53 Conformer encoder tests (28 unit + 25 HF-equivalence), 20 Q-Former projector tests, 62 full Granite Speech model tests, 11 generation tests",
-      "Dedicated torch.compile parity suite (test_granite_speech_torch_compile.py) confirming compiled and eager execution stay numerically equivalent at each stage",
-      "Audio pipeline compresses a 16,000-sample (1s @ 16kHz) window down to ~7 tokens before it reaches the LLM decoder — roughly 2285× compression",
-      "146 CPU-only tests plus 8 GPU-only tests (numerical equivalence, compile parity, activation debugging) in the final validation suite",
-    ],
-    results:
-      "On an NVIDIA H200 GPU (bf16), end-to-end latency was 489.4ms for 3s of audio, 532.3ms for 10s, and 2662.2ms for 30s — with 96.4–99.3% of that time spent in the LLM decoder rather than the encoder (encoder latency stayed roughly flat at 17.7–18.8ms regardless of clip length). Throughput ranged 120.7–249.0 tokens/sec (real-time factor 0.053–0.163) depending on clip length.",
   },
   {
     slug: "neural-dependency-parser",
@@ -370,63 +427,6 @@ export const projects: Project[] = [
         src: "/projects/hierarchical-image-classifier/training_curves.png",
         alt: "Training and validation loss and accuracy curves over 30 epochs",
         caption: "Training curves: loss and super-/sub-class accuracy over 30 epochs.",
-      },
-    ],
-  },
-  {
-    slug: "action-segmentation-mice",
-    title: "Action Segmentation in Mice",
-    short: "An evaluation pipeline for a neural behavior classifier used in computational neuroscience research.",
-    description: "Diagnostic and behavioral-fingerprinting pipeline built around a Temporal Convolutional Network model, evaluating its classification of mouse behavior from multi-modal time-series data across 57 research sessions.",
-    github: "https://github.com/zacharyzusin/Neuroscience-Research",
-    visual: "timeseries",
-    tech: ["Python", "PyTorch", "UMAP", "OpenCV", "Time-Series Analysis"],
-    problem:
-      "Understanding animal behavior from continuous pose-tracking and sensor data requires segmenting it into discrete, meaningful actions — and once you have a model that does that, you need real tooling to check whether its predictions actually hold up across many different recording sessions and labs, not just one dataset.",
-    approach:
-      "Built the evaluation and behavioral-fingerprinting pipeline around DAART, a pretrained Temporal Convolutional Network classifier from the International Brain Laboratory (IBL), applying it across 57 real research sessions spanning 8 different labs — pulling data via the IBL's own ONE API and validating predictions both quantitatively and qualitatively.",
-    highlights: [
-      "Wrote a custom non-uniform Savitzky-Golay filter to smooth pose-tracking data that had irregular dropped/missing frames — the standard scipy implementation only handles uniformly-sampled data",
-      "Built an 88-dimensional behavioral \"fingerprint\" per trial (state-duration histograms across time bins and task periods) and visualized cross-session structure with UMAP",
-      "Validated the model two ways: quantitatively via macro-averaged F1 agreement scores and event-aligned heatmaps, and qualitatively via frame-by-frame video overlays of predicted states against real footage",
-      "Pulled real multi-lab data (57 sessions, 8 IBL labs) via the IBL's ONE API and brainbox tooling, not a single canned dataset",
-    ],
-    technical: [
-      "Loaded a pretrained daart.models.Segmenter (TCN) via PyTorch state dict, ran inference across sessions pulled with one.api.ONE and brainbox.io.one.SessionLoader",
-      "Custom non-uniform Savitzky-Golay smoothing: fits a least-squares polynomial per window to handle irregular timestamps from dropped tracking frames, rather than assuming uniform sampling",
-      "Feature engineering: pose markers combined with interpolated wheel velocity and derived acceleration, Z-scored, batched at sequence length 15",
-      "Behavioral fingerprint: 11 time bins × 2 task periods × 4 behavioral states of state-duration histograms → 88-dim vector per trial → UMAP for 2D cross-session visualization",
-    ],
-    images: [
-      {
-        src: "/projects/action-segmentation-mice/mice-architecture.png",
-        alt: "DAART semi-supervised temporal convolutional network architecture diagram",
-        caption: "The DAART model: an encoder maps behavioral features to a latent embedding, classified against sparse hand labels and dense heuristic labels, with a predictor forecasting future features for self-supervision.",
-      },
-      {
-        src: "/projects/action-segmentation-mice/behavior-panel.png",
-        alt: "Composite figure: video-overlay frames per behavioral state, paw-speed transition plots, and aligned discrete-state heatmaps",
-        caption: "Top: video frames overlaid with paw position per predicted state (Still, Move, Wheel Turn, Groom). Middle: paw speed aligned to state transitions across trials. Bottom: predicted-state heatmaps for one session, split by correct vs. incorrect trials.",
-      },
-      {
-        src: "/projects/action-segmentation-mice/mice-smoothing-validation.png",
-        alt: "Model inference compared across Dropbox, IBL, and IBL-smoothed datasets",
-        caption: "Validating the custom smoothing filter: state predictions and time-spent-per-state stay consistent whether run on the original data or the Savitzky-Golay-smoothed version.",
-      },
-      {
-        src: "/projects/action-segmentation-mice/mice-trial-based.png",
-        alt: "Per-trial predicted state timeline aligned with wheel velocity and paw position traces",
-        caption: "Two individual trials: predicted state sequence lined up against raw wheel velocity and paw position, showing the classifier tracking real behavioral transitions.",
-      },
-      {
-        src: "/projects/action-segmentation-mice/mice-histograms.png",
-        alt: "Histograms of time spent in each behavioral state across two trial periods",
-        caption: "The raw material for the 88-dim behavioral fingerprint: state-duration histograms across 11 time bins, split by trial period (first movement to feedback vs. feedback to trial end).",
-      },
-      {
-        src: "/projects/action-segmentation-mice/mice-umap.png",
-        alt: "UMAP projection of behavioral fingerprints across sessions and trial splits",
-        caption: "UMAP projection of the 88-dim behavioral fingerprint — left: across sessions from two data sources; right: even vs. odd trials within a session, checking that a mouse's behavioral signature stays consistent.",
       },
     ],
   },
