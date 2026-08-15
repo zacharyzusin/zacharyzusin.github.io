@@ -28,7 +28,10 @@ const experiences = [
     location: "New York, NY",
     period: "May 2026 – Aug 2026",
     type: "industry",
-    bullets: [],
+    bullets: [
+      "Built AI-powered tools that resolve discrepancies between PayPal's internal and external-facing API error codes, helping internal engineers debug faster and external partners integrate more reliably",
+      "Deployed as a company-wide MCP server containerized with Docker, already used to fix production bugs",
+    ],
   },
   {
     title: "Graduate Researcher",
@@ -38,7 +41,7 @@ const experiences = [
     type: "research",
     bullets: [
       "Developed a framework for fine-tuning vision-language models for classification tasks with high intra-class diversity",
-      "Enabled automatic discovery of meaningful sub-categories, improving detection of complex visual variations",
+      "Built fault-tolerant training infrastructure on a GPU cluster with automated checkpointing and job recovery",
     ],
   },
   {
@@ -48,9 +51,8 @@ const experiences = [
     period: "Sep 2025 – May 2026",
     type: "research",
     bullets: [
-      "Investigated new methods for automated theorem proving, leveraging complexity theory and machine learning",
-      "Created new representations of mathematical theorems and proof techniques to be better understood by ML models",
-      "Constructed techniques to quantify theorem difficulty and integrate real and synthetic data into model training",
+      "Built a research framework to evaluate how well LLMs can write formal mathematical proofs under constrained inference-time compute, enabling fair comparison across different reasoning strategies",
+      "Benchmarked open 7-8B parameter LLMs on the audited miniF2F proof dataset, using the Lean 4 assistant to verify correctness and a custom metric to measure proof success rate under a fixed compute budget",
     ],
   },
   {
@@ -60,8 +62,7 @@ const experiences = [
     period: "Jun 2024 – Aug 2024",
     type: "research",
     bullets: [
-      "Implemented a diagnostic pipeline in Python to evaluate the efficacy of Temporal Convolutional Network models in classifying mouse behavior",
-      "Analyzed multi-modal time-series data (wheel velocity, paw locations, etc.) to validate models' behavioral predictions",
+      "Evaluated Temporal Convolutional Network models for classifying mouse behavior, analyzing multi-modal time-series data (wheel velocity, paw locations) to validate predictions",
     ],
   },
 ];
