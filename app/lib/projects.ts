@@ -213,7 +213,7 @@ export const projects: Project[] = [
     slug: "continual-alignment-preservation",
     title: "LLM Alignment Preservation",
     short: "A research paper evaluating whether continual learning methods can stop an LLM's safety alignment from eroding across a long fine-tuning pipeline.",
-    description: "A research paper (with Daniel Ben-Levi, Columbia University) on the \"alignment tax\" — the tendency for a safety-aligned LLM to lose that alignment as it's fine-tuned on unrelated, entirely benign capability tasks. Reframes the problem as catastrophic forgetting and runs the first evaluation of state-of-the-art continual learning methods across a realistic 7-task sequential fine-tuning chain, instead of the two-stage settings prior work relied on.",
+    description: "A research paper on the \"alignment tax\" — the tendency for a safety-aligned LLM to lose that alignment as it's fine-tuned on unrelated, entirely benign capability tasks. Reframes the problem as catastrophic forgetting and runs the first evaluation of state-of-the-art continual learning methods across a realistic 7-task sequential fine-tuning chain, instead of the two-stage settings prior work relied on.",
     github: "https://github.com/zacharyzusin/clmm-project",
     visual: "alignment",
     tech: ["PyTorch", "LoRA", "Continual Learning", "LLM Safety Alignment", "Llama 2", "Qwen3"],
