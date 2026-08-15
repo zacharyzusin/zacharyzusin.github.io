@@ -262,36 +262,74 @@ function postag(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) 
 }
 
 function ngram(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
-  const boxes = 3;
-  const gap = 10;
-  const bw = (w * 0.7 - gap * (boxes - 1)) / boxes;
-  const oy = h * 0.38;
-  const bh = h * 0.24;
-  const shift = (t * 0.6) % 1;
-  for (let i = 0; i < boxes; i++) {
-    const x = i * (bw + gap);
+  // The project's actual distinguishing mechanic, not a generic "n-gram
+  // predicts the next word" demo: the same essay is scored by two
+  // independently-trained trigram models (one per proficiency corpus), and
+  // classified by whichever model finds it more "fluent" (lower
+  // perplexity) — the point being the interpretable classification task,
+  // not the perplexity number by itself.
+  const tokens = 6;
+  const tw = w / tokens;
+  const rowY = h * 0.06;
+  const rowH = h * 0.16;
+  const readIdx = Math.floor((t * 2.2) % tokens);
+  for (let i = 0; i < tokens; i++) {
     ctx.fillStyle = ACCENT;
-    ctx.globalAlpha = 0.5 + 0.5 * Math.max(0, 1 - Math.abs(i - shift * boxes));
-    ctx.fillRect(x, oy, bw, bh);
-    if (i < boxes - 1) {
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = MUTED;
-      ctx.beginPath();
-      ctx.moveTo(x + bw, oy + bh / 2);
-      ctx.lineTo(x + bw + gap, oy + bh / 2);
-      ctx.stroke();
-    }
+    ctx.globalAlpha = i === readIdx ? 0.9 : 0.35;
+    ctx.fillRect(i * tw + 1, rowY, tw - 2, rowH);
   }
-  // predicted next token
-  const px = boxes * (bw + gap);
-  ctx.globalAlpha = 0.4 + 0.6 * (Math.sin(t * 3) * 0.5 + 0.5);
-  ctx.fillStyle = ACCENT_LIGHT;
-  ctx.fillRect(px, oy, bw, bh);
   ctx.globalAlpha = 1;
-  ctx.strokeStyle = ACCENT_LIGHT;
-  ctx.setLineDash([3, 3]);
-  ctx.strokeRect(px, oy, bw, bh);
-  ctx.setLineDash([]);
+
+  const boxY = h * 0.34;
+  const boxH = h * 0.26;
+  const boxW = w * 0.36;
+  const leftX = w * 0.08;
+  const rightX = w - leftX - boxW;
+  const leftCX = leftX + boxW / 2;
+  const rightCX = rightX + boxW / 2;
+  const forkY = rowY + rowH + h * 0.03;
+
+  // fork connecting the one shared essay to both candidate models
+  ctx.strokeStyle = MUTED;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(leftCX, boxY - 2);
+  ctx.lineTo(w / 2, forkY);
+  ctx.lineTo(rightCX, boxY - 2);
+  ctx.stroke();
+
+  // Perplexity oscillates out of phase between the two models, so which one
+  // "wins" (lower perplexity) trades off over time — same as how a real
+  // essay scores differently against each proficiency corpus.
+  const perpA = 0.3 + 0.4 * (Math.sin(t * 1.1) * 0.5 + 0.5);
+  const perpB = 0.3 + 0.4 * (Math.sin(t * 1.1 + 2.6) * 0.5 + 0.5);
+  const aWins = perpA < perpB;
+
+  const drawModel = (x: number, label: string, perp: number, winning: boolean) => {
+    ctx.fillStyle = winning ? ACCENT_LIGHT : ACCENT;
+    ctx.globalAlpha = winning ? 0.85 : 0.4;
+    ctx.fillRect(x, boxY, boxW, boxH);
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = "#f1f5f9";
+    ctx.font = "700 8px monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(label, x + boxW / 2, boxY + boxH / 2 + 3);
+    ctx.textAlign = "left";
+
+    // perplexity bar: shorter = lower perplexity = the better fluency match
+    const barY = boxY + boxH + h * 0.07;
+    const barH = Math.max(2, h * 0.045);
+    ctx.fillStyle = MUTED;
+    ctx.globalAlpha = 0.6;
+    ctx.fillRect(x, barY, boxW, barH);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = winning ? ACCENT_LIGHT : ACCENT;
+    ctx.fillRect(x, barY, boxW * perp, barH);
+  };
+
+  drawModel(leftX, "A", perpA, aWins);
+  drawModel(rightX, "B", perpB, !aWins);
 }
 
 function cky(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
