@@ -15,7 +15,8 @@ export type VisualType =
   | "regression"
   | "reps"
   | "walker"
-  | "pipeline";
+  | "pipeline"
+  | "alignment";
 
 const ACCENT = "#3b82f6";
 const ACCENT_LIGHT = "#93c5fd";
@@ -694,6 +695,69 @@ function pipeline(ctx: CanvasRenderingContext2D, w: number, h: number, t: number
   }
 }
 
+function alignment(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
+  // The paper's central empirical result: run a safety-aligned model through
+  // a 7-task sequential fine-tuning chain and most continual-learning
+  // methods' attack-success-rate climbs steeply, while one (the paper's
+  // best-performing method, FOREVER) stays low throughout. Two lines
+  // diverging across the same 7 stages, drawn left-to-right, is that result
+  // directly — not a generic line chart.
+  const stages = 7;
+  const marginX = w * 0.08;
+  const plotW = w - marginX * 2;
+  const baseY = h * 0.8;
+  const topY = h * 0.18;
+  const xAt = (s: number) => marginX + (plotW * (s - 1)) / (stages - 1);
+
+  // Draw progress cycles left to right across the chain, then resets.
+  const revealed = 1 + ((t * 0.3) % 1) * (stages - 1);
+
+  // Most methods: near-flat through the safety stage, then climb sharply.
+  const degradedY = (s: number) => {
+    const frac = Math.max(0, (s - 2) / (stages - 2));
+    return baseY - (baseY - topY) * Math.pow(frac, 1.3);
+  };
+  // FOREVER: stays close to the post-alignment baseline the whole chain.
+  const preservedY = (s: number) => baseY - (baseY - topY) * 0.1;
+
+  ctx.strokeStyle = MUTED;
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(marginX, baseY);
+  ctx.lineTo(marginX + plotW, baseY);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  const drawLine = (color: string, yFn: (s: number) => number) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.8;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    for (let s = 1; s <= revealed; s += 0.1) {
+      const x = xAt(s);
+      const y = yFn(s);
+      if (s === 1) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  };
+  drawLine(ACCENT, degradedY);
+  drawLine(ACCENT_LIGHT, preservedY);
+
+  for (let s = 1; s <= Math.floor(revealed + 0.001); s++) {
+    ctx.beginPath();
+    ctx.arc(xAt(s), degradedY(s), 2, 0, Math.PI * 2);
+    ctx.fillStyle = ACCENT;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(xAt(s), preservedY(s), 2, 0, Math.PI * 2);
+    ctx.fillStyle = ACCENT_LIGHT;
+    ctx.fill();
+  }
+}
+
 const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => void> = {
   waveform,
   hierarchy,
@@ -708,6 +772,7 @@ const RENDERERS: Record<VisualType, (ctx: CanvasRenderingContext2D, w: number, h
   reps,
   walker,
   pipeline,
+  alignment,
 };
 
 export default function ProjectVisual({ type }: { type: VisualType }) {
