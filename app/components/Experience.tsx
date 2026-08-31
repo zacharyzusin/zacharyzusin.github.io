@@ -23,14 +23,14 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 const experiences = [
   {
-    title: "Software Engineer Intern",
+    title: "Backend Software Engineer Intern",
     org: "PayPal",
-    location: "New York, NY",
+    location: "San Jose, CA",
     period: "May 2026 – Aug 2026",
     type: "industry",
     bullets: [
-      "Built AI-powered tools that resolve discrepancies between PayPal's internal and external-facing API error codes, helping internal engineers debug faster and external partners integrate more reliably",
-      "Deployed as a company-wide MCP server containerized with Docker, already used to fix production bugs",
+      "Built an AI-assisted system that reconciles PayPal's internal API code with its published documentation, catching mismatches that caused partner integration failures",
+      "Designed a trust model where an LLM proposes error-to-code mappings, re-verified against live source before shipping; deployed as an MCP server that has already uncovered several bugs and discrepancies in production",
     ],
   },
   {
@@ -52,7 +52,7 @@ const experiences = [
     type: "research",
     bullets: [
       "Built a research framework to evaluate how well LLMs can write formal mathematical proofs under constrained inference-time compute, enabling fair comparison across different reasoning strategies",
-      "Benchmarked open 7-8B parameter LLMs on the audited miniF2F proof dataset, using the Lean 4 assistant to verify correctness and a custom metric to measure proof success rate under a fixed compute budget",
+      "Benchmarked open 7-8B LLMs on miniF2F, using Lean 4 to verify proofs under a fixed compute budget",
     ],
   },
   {
@@ -62,7 +62,8 @@ const experiences = [
     period: "Jun 2024 – Aug 2024",
     type: "research",
     bullets: [
-      "Evaluated Temporal Convolutional Network models for classifying mouse behavior, analyzing multi-modal time-series data (wheel velocity, paw locations) to validate predictions",
+      "Evaluated the efficacy of Temporal Convolutional Network models in classifying mouse behavior",
+      "Analyzed multi-modal time-series data (wheel velocity, paw locations) to validate behavioral predictions",
     ],
   },
 ];

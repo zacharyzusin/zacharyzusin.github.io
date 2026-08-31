@@ -27,17 +27,6 @@ function FadeIn({
 
 const degrees = [
   {
-    degree: "Master of Science in Computer Science",
-    school: "Columbia University",
-    school2: "Fu Foundation School of Engineering and Applied Science",
-    period: "Sep 2025 – May 2026",
-    gpa: "4.1",
-    highlights: [
-      "Researcher in 2 CS labs",
-      "Focus: Machine Learning, Computer Vision, Automated Theorem Proving",
-    ],
-  },
-  {
     degree: "Bachelor of Arts in Computer Science",
     school: "Columbia University",
     school2: "Columbia College",
@@ -46,6 +35,17 @@ const degrees = [
     highlights: [
       "Dean's List",
       "Relevant coursework: Databases, High-Performance Computing, Machine Learning, Computer Vision, Natural Language Processing, Robotics, Analysis of Algorithms, Systems Programming, Computer Systems, Probability, Statistics",
+    ],
+  },
+  {
+    degree: "Master of Science in Computer Science",
+    school: "Columbia University",
+    school2: "Fu Foundation School of Engineering and Applied Science",
+    period: "Sep 2025 – May 2026",
+    gpa: "4.1",
+    highlights: [
+      "Researcher in 2 CS labs",
+      "Focus: Machine Learning, Computer Vision, Automated Theorem Proving",
     ],
   },
 ];
